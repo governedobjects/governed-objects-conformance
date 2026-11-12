@@ -1,0 +1,134 @@
+{
+  "id": "D22-CS1-001",
+  "title": "State A -> B -> A gives three pairwise-distinct Object Versions; the first is stale",
+  "cs": [
+    "CS-1"
+  ],
+  "requirements": [
+    "CON-UNIQUE-001",
+    "CON-ADVANCE-001",
+    "CON-CONFLICT-001"
+  ],
+  "modality": "MUST",
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "writer",
+      "object_id": "cs1-a",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs1-alpha"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "m1",
+      "actor": "writer",
+      "object_id": "cs1-a",
+      "changes": {
+        "title": "cs1-beta"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "m2",
+      "actor": "writer",
+      "object_id": "cs1-a",
+      "changes": {
+        "title": "cs1-alpha"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs1-a"
+    },
+    {
+      "op": "mutate",
+      "as": "stale_first",
+      "actor": "writer",
+      "object_id": "cs1-a",
+      "changes": {
+        "title": "cs1-gamma"
+      },
+      "expected_version": "$c.semantic_view.object_version"
+    },
+    {
+      "op": "get_history",
+      "as": "h2",
+      "object_id": "cs1-a"
+    }
+  ],
+  "assert": [
+    {
+      "observer_field": {
+        "step": "m2",
+        "path": "accepted_state",
+        "equals": {
+          "title": "cs1-alpha",
+          "status": "draft"
+        }
+      },
+      "requirements": [
+        "CON-UNIQUE-001"
+      ],
+      "label": "state recurs"
+    },
+    {
+      "distinct": [
+        "$c.semantic_view.object_version",
+        "$m1.semantic_view.object_version",
+        "$m2.semantic_view.object_version"
+      ],
+      "requirements": [
+        "CON-UNIQUE-001",
+        "CON-ADVANCE-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "stale_first",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "h",
+        "after": "h2"
+      },
+      "requirements": [
+        "CON-NOADVANCE-001"
+      ]
+    },
+    {
+      "history_unique_versions": "h2",
+      "requirements": [
+        "CON-UNIQUE-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs1-a",
+        "history": "h2"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    }
+  ]
+}

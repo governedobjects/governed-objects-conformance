@@ -1,0 +1,91 @@
+{
+  "id": "C-OP-004",
+  "title": "Stale version yields CONFLICT outcome",
+  "requirements": [
+    "OP-OUTCOME-001",
+    "CON-CONFLICT-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "requires_capabilities": {
+    "mutable_objects": true
+  },
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-op-004",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "V1"
+      }
+    },
+    {
+      "op": "read",
+      "as": "v1",
+      "actor": "writer",
+      "object_id": "wi-op-004"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-op-004"
+    },
+    {
+      "op": "mutate",
+      "actor": "writer",
+      "object_id": "wi-op-004",
+      "changes": {
+        "title": "V2"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "mutate",
+      "as": "conflict",
+      "actor": "writer",
+      "object_id": "wi-op-004",
+      "changes": {
+        "title": "Lost"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-op-004"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-op-004"
+    }
+  ],
+  "assert": [
+    {
+      "step": "conflict",
+      "outcome": "CONFLICT"
+    },
+    {
+      "compare": "$after.semantic_view.accepted_state.title",
+      "equals": "V2"
+    },
+    {
+      "relationship_set_equals": "v1",
+      "step": "after"
+    },
+    {
+      "compare": "$conflict.semantic_view.object_version",
+      "equals": "$after.semantic_view.object_version"
+    },
+    {
+      "compare": "$history_after.canonical_history",
+      "not_equals": "$history_before.canonical_history"
+    },
+    {
+      "history_accepted_count": 2,
+      "step": "history_after"
+    }
+  ]
+}

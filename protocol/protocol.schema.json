@@ -1,0 +1,1155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://conformance.invalid/governed-objects/adapter-protocol",
+  "title": "Harness Adapter Protocol (NON-NORMATIVE)",
+  "description": "Test infrastructure only. Not a Governed Object interchange format. Lists every operation and field the Draft 2.2 Core runner sends and reads. Transport: NDJSON over stdin/stdout, one request line, one response line.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    }
+  ],
+  "$defs": {
+    "request": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/req_capabilities"
+        },
+        {
+          "$ref": "#/$defs/req_reset"
+        },
+        {
+          "$ref": "#/$defs/req_define_fixture_types"
+        },
+        {
+          "$ref": "#/$defs/req_restart"
+        },
+        {
+          "$ref": "#/$defs/req_create"
+        },
+        {
+          "$ref": "#/$defs/req_read"
+        },
+        {
+          "$ref": "#/$defs/req_mutate"
+        },
+        {
+          "$ref": "#/$defs/req_transition"
+        },
+        {
+          "$ref": "#/$defs/req_add_relationship"
+        },
+        {
+          "$ref": "#/$defs/req_remove_relationship"
+        },
+        {
+          "$ref": "#/$defs/req_detach"
+        },
+        {
+          "$ref": "#/$defs/req_restore"
+        },
+        {
+          "$ref": "#/$defs/req_get_history"
+        },
+        {
+          "$ref": "#/$defs/req_replay"
+        },
+        {
+          "$ref": "#/$defs/req_semantic_view"
+        },
+        {
+          "$ref": "#/$defs/req_set_clock"
+        }
+      ]
+    },
+    "req_capabilities": {
+      "type": "object",
+      "description": "Return the adapter's self-declaration and capability claims.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "capabilities"
+        }
+      },
+      "required": [
+        "op"
+      ],
+      "additionalProperties": false
+    },
+    "req_reset": {
+      "type": "object",
+      "description": "Discard all object state and revocations. Fixture definitions already received are kept.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "reset"
+        }
+      },
+      "required": [
+        "op"
+      ],
+      "additionalProperties": false
+    },
+    "req_define_fixture_types": {
+      "type": "object",
+      "description": "Deliver the suite-owned fixture definitions. The adapter implements them and echoes fixtures_sha256 in the response.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "define_fixture_types"
+        },
+        "fixtures": {
+          "$ref": "#/$defs/fixtures"
+        },
+        "fixtures_sha256": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "fixtures",
+        "fixtures_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "req_restart": {
+      "type": "object",
+      "description": "Restart the runtime over the surviving store; optionally revoke the named actors' grants.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "restart"
+        },
+        "revoke": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "op"
+      ],
+      "additionalProperties": false
+    },
+    "req_create": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "create"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "object_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "initial_state": {
+          "type": "object",
+          "description": "Field name to value. Values are strings except where a scenario deliberately sends another JSON type to test refusal.",
+          "additionalProperties": true
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "operational_metadata": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "op",
+        "actor",
+        "object_id",
+        "type",
+        "initial_state"
+      ],
+      "additionalProperties": false
+    },
+    "req_read": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "read"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "object_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "actor",
+        "object_id"
+      ],
+      "additionalProperties": false
+    },
+    "req_mutate": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "mutate"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "object_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "changes": {
+          "type": "object",
+          "description": "Field name to value. Values are strings except where a scenario deliberately sends another JSON type to test refusal.",
+          "additionalProperties": true
+        },
+        "expected_version": {
+          "description": "Expected Object Version. Decimal-integer string or integer; null/absent means no precondition. The adapter must not coerce other values.",
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "op",
+        "actor",
+        "object_id",
+        "changes"
+      ],
+      "additionalProperties": false
+    },
+    "req_transition": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "transition"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "object_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "expected_version": {
+          "description": "Expected Object Version. Decimal-integer string or integer; null/absent means no precondition. The adapter must not coerce other values.",
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "op",
+        "actor",
+        "object_id",
+        "to"
+      ],
+      "additionalProperties": false
+    },
+    "req_add_relationship": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "add_relationship"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "object_id": {
+          "type": "string"
+        },
+        "relationship": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "target"
+          ]
+        },
+        "expected_version": {
+          "description": "Expected Object Version. Decimal-integer string or integer; null/absent means no precondition. The adapter must not coerce other values.",
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "op",
+        "actor",
+        "object_id",
+        "relationship"
+      ],
+      "additionalProperties": false
+    },
+    "req_remove_relationship": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "remove_relationship"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "object_id": {
+          "type": "string"
+        },
+        "relationship": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "target"
+          ]
+        },
+        "expected_version": {
+          "description": "Expected Object Version. Decimal-integer string or integer; null/absent means no precondition. The adapter must not coerce other values.",
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "op",
+        "actor",
+        "object_id",
+        "relationship"
+      ],
+      "additionalProperties": false
+    },
+    "req_detach": {
+      "type": "object",
+      "description": "Operational-metadata-only operation (conditional on operational_metadata_ops).",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "detach"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "object_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "object_id"
+      ],
+      "additionalProperties": false
+    },
+    "req_restore": {
+      "type": "object",
+      "description": "Restore objects through the runtime's governed restoration path.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "restore"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "One object of a restoration bundle, in the harness-neutral shape the adapter maps to its runtime's import API.",
+            "properties": {
+              "canonical_identity": {
+                "type": "string"
+              },
+              "type_identity": {
+                "type": "string"
+              },
+              "type_version": {
+                "type": "string"
+              },
+              "accepted_state": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "relationships": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "target": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "target"
+                  ]
+                }
+              },
+              "current_object_version": {
+                "type": "string"
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "position": {
+                      "type": "integer"
+                    },
+                    "effect": {
+                      "type": "string"
+                    },
+                    "resulting_object_version": {
+                      "type": "string"
+                    },
+                    "post_image": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "baseline_relationships": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string"
+                          },
+                          "target": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "target"
+                        ]
+                      }
+                    },
+                    "relationship": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "target": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "target"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "actor": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "accepted_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "position",
+                    "effect",
+                    "resulting_object_version"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "canonical_identity",
+              "type_identity",
+              "type_version",
+              "accepted_state",
+              "current_object_version",
+              "history"
+            ]
+          }
+        }
+      },
+      "required": [
+        "op",
+        "actor",
+        "objects"
+      ],
+      "additionalProperties": false
+    },
+    "req_get_history": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "get_history"
+        },
+        "object_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "object_id"
+      ],
+      "additionalProperties": false
+    },
+    "req_replay": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "replay"
+        },
+        "object_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "object_id"
+      ],
+      "additionalProperties": false
+    },
+    "req_semantic_view": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "semantic_view"
+        },
+        "object_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "object_id"
+      ],
+      "additionalProperties": false
+    },
+    "req_set_clock": {
+      "type": "object",
+      "description": "Only sent when the adapter declares harness_clock; otherwise the scenario is NOT EXECUTABLE.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "op": {
+          "const": "set_clock"
+        },
+        "at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "at"
+      ],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "description": "Every response echoes id. Fields other than id, ok and outcome are operation-dependent.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ok": {
+          "type": "boolean",
+          "description": "false only for a request the adapter could not carry out (harness fault), never for a refused operation"
+        },
+        "outcome": {
+          "enum": [
+            "ACCEPTED",
+            "AUTHORIZATION_DENIED",
+            "SEMANTICALLY_INVALID",
+            "CONFLICT",
+            "REFUSED",
+            "UNMAPPABLE",
+            "UNCLASSIFIED"
+          ]
+        },
+        "outcome_native": {
+          "type": "string"
+        },
+        "outcome_detail": {
+          "type": "string"
+        },
+        "unmappable": {
+          "type": "boolean"
+        },
+        "caller_result": {
+          "description": "The exact value the runtime returned to the requester, serialized without removal, addition or renaming. Used for disclosure checks."
+        },
+        "semantic_view": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "enum": [
+                    "observer",
+                    "replay"
+                  ]
+                },
+                "canonical_identity": {
+                  "type": "string"
+                },
+                "type_identity": {
+                  "type": "string"
+                },
+                "type_version": {
+                  "type": "string"
+                },
+                "object_version": {},
+                "accepted_state": {
+                  "type": "object"
+                },
+                "relationships": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "target": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "canonical_history_summary": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/history_entry"
+                  }
+                },
+                "operational_metadata": {
+                  "type": "object"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "canonical_history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/history_entry"
+          }
+        },
+        "audit_history": {
+          "type": "array"
+        },
+        "capabilities": {
+          "$ref": "#/$defs/capabilities"
+        },
+        "fixtures_sha256": {
+          "type": "string"
+        },
+        "types_defined": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "ok",
+        "outcome"
+      ]
+    },
+    "capabilities": {
+      "type": "object",
+      "description": "The adapter's SELF-DECLARATION. The runner records it as self-declared and never inspects the implementation.",
+      "properties": {
+        "protocol": {
+          "const": "draft2.2"
+        },
+        "implementation": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "name",
+            "version"
+          ]
+        },
+        "spec_version": {
+          "const": "v0alpha1"
+        },
+        "spec_revision": {
+          "const": "draft2.2"
+        },
+        "core_claimed": {
+          "const": true
+        },
+        "profiles_claimed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "build": {
+          "type": "object",
+          "description": "Optional adapter-supplied build facts (toolchain, module paths, ...). Recorded verbatim; never used to judge validity."
+        },
+        "replay": {
+          "type": "boolean"
+        },
+        "replay_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mutable_objects": {
+          "type": "boolean"
+        },
+        "expected_version_required": {
+          "type": "boolean"
+        },
+        "unconditional_mutation": {
+          "type": "boolean"
+        },
+        "relationship_add": {
+          "type": "boolean"
+        },
+        "relationship_remove": {
+          "type": "boolean"
+        },
+        "type_version_exposed": {
+          "type": "boolean"
+        },
+        "semantic_portability_view": {
+          "type": "boolean"
+        },
+        "replay_baseline": {
+          "type": "string"
+        },
+        "caller_result": {
+          "type": "string"
+        },
+        "observer_channel": {
+          "type": "string"
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "restart": {
+          "type": "boolean"
+        },
+        "governance_reconfiguration": {
+          "type": "boolean"
+        },
+        "harness_clock": {
+          "type": "boolean"
+        },
+        "restoration": {
+          "type": "boolean"
+        },
+        "restoration_api": {
+          "type": "string"
+        },
+        "restorable_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "create_with_relationships": {
+          "type": "boolean"
+        },
+        "operational_metadata_ops": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "version_token_grammar": {
+          "type": "string",
+          "description": "Regular expression a native Object Version token must match"
+        },
+        "version_request_encoding": {
+          "type": "string"
+        },
+        "object_version_ceiling": {
+          "type": "string"
+        },
+        "never_issued_version_token": {
+          "type": ["string", "integer"],
+          "description": "Optional. A token, in this adapter's own grammar, that this run guarantees was never issued for any object. Backward-compatible: scenarios that need a never-issued precondition fall back to the integer literal 900000001 when this is absent."
+        },
+        "declared_refusals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "concurrent_invocation": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "implementation",
+        "spec_version",
+        "spec_revision",
+        "core_claimed",
+        "profiles_claimed"
+      ]
+    },
+    "fixtures": {
+      "type": "object",
+      "description": "Suite-owned fixture definitions (fixtures/fixtures.json).",
+      "properties": {
+        "fixtures_format": {
+          "type": "string"
+        },
+        "fixtures_version": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "actors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "read",
+                "create",
+                "update",
+                "transition",
+                "add_relationship",
+                "remove_relationship",
+                "import"
+              ]
+            }
+          }
+        },
+        "types": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              },
+              "fields": {
+                "type": "object",
+                "additionalProperties": {
+                  "enum": [
+                    "string",
+                    "decimal-string",
+                    "lifecycle"
+                  ]
+                }
+              },
+              "required_on_create": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "lifecycle": {
+                "type": "object"
+              },
+              "create_defaults": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "relationship_types": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "actions": {
+                "type": "object"
+              },
+              "rules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "field": {
+                      "type": "string"
+                    },
+                    "rule": {
+                      "enum": [
+                        "non-blank-string"
+                      ]
+                    },
+                    "applies_to": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "create",
+                          "update"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "field",
+                    "rule",
+                    "applies_to"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "version",
+              "fields"
+            ]
+          }
+        }
+      },
+      "required": [
+        "fixtures_version",
+        "actors",
+        "types"
+      ]
+    },
+    "history_entry": {
+      "type": "object",
+      "properties": {
+        "effect": {
+          "enum": [
+            "object_created",
+            "state_updated",
+            "lifecycle_transition",
+            "relationship_added",
+            "relationship_removed"
+          ]
+        },
+        "canonical_identity": {
+          "type": "string"
+        },
+        "type_identity": {
+          "type": "string"
+        },
+        "type_version": {
+          "type": "string"
+        },
+        "object_version": {},
+        "actor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "accepted_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "relationship_type": {
+          "type": "string"
+        },
+        "relationship_target": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "effect"
+      ]
+    },
+    "semantic_view": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "enum": [
+            "observer",
+            "replay"
+          ]
+        },
+        "canonical_identity": {
+          "type": "string"
+        },
+        "type_identity": {
+          "type": "string"
+        },
+        "type_version": {
+          "type": "string"
+        },
+        "object_version": {},
+        "accepted_state": {
+          "type": "object"
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "canonical_history_summary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/history_entry"
+          }
+        },
+        "operational_metadata": {
+          "type": "object"
+        }
+      }
+    },
+    "outcome": {
+      "enum": [
+        "ACCEPTED",
+        "AUTHORIZATION_DENIED",
+        "SEMANTICALLY_INVALID",
+        "CONFLICT",
+        "REFUSED",
+        "UNMAPPABLE",
+        "UNCLASSIFIED"
+      ]
+    }
+  }
+}

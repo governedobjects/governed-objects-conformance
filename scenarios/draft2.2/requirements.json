@@ -1,0 +1,574 @@
+{
+  "spec_version": "v0alpha1",
+  "spec_revision": "draft2.2",
+  "profile_scope": "Core",
+  "requirements": [
+    {
+      "id": "CORE-ID-001",
+      "title": "Durable identity",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "core.md",
+      "text_sha256": "d69fc6e2acea6bf2000a3ade7006f1ffbacdd2373d4f3dfae3930846d6807f18"
+    },
+    {
+      "id": "CORE-ID-002",
+      "title": "Identity independence",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "core.md",
+      "text_sha256": "2383944dca71617af988398201c4d0739ee912749e972e38cb30aeb63dbb15bc"
+    },
+    {
+      "id": "CORE-STATE-001",
+      "title": "Explicit accepted state",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "core.md",
+      "text_sha256": "3dd81c975ab10396f210b3f4d425c23e26528a826ad858a0bfeb48db6c2e38f3"
+    },
+    {
+      "id": "CORE-STATE-002",
+      "title": "Governed acceptance",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "core.md",
+      "text_sha256": "64141517b09b5d414dc0120719b44164b6f0f3657e794835073851240a95e2db"
+    },
+    {
+      "id": "CORE-GOV-001",
+      "title": "Governed boundary",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "core.md",
+      "text_sha256": "0276a72fd802f46390b1a5eb7a81a5e4dd44322c7af0deb99b55c393870eb0e4",
+      "coverage": "indirect",
+      "note": "Every scenario changes canonical state only through governed operations; no ungoverned write path is exposed."
+    },
+    {
+      "id": "CORE-HIST-001",
+      "title": "Accepted history",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "core.md",
+      "text_sha256": "02c975111a7962f13b5ed17a9ca622c658a8dca446050d8d8f4206e58648fd38"
+    },
+    {
+      "id": "CORE-LINEAGE-001",
+      "title": "One Canonical History lineage",
+      "level": "MUST",
+      "spec_status": "NEW",
+      "file": "core.md",
+      "text_sha256": "9565a5e3920a0197873e61844828a2ccada8d53479f79629050a022b834db6f6",
+      "note": "Multi-implementation clause checked only through its observable consequence (CS-7). Concurrency clause NOT EXECUTABLE (D22-CON-001)."
+    },
+    {
+      "id": "CORE-EVOL-001",
+      "title": "Preservation through evolution",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "core.md",
+      "text_sha256": "df231a1474a2dc6f9d6a8817aa005b4b9f2b9b0a03d3aac8e3572dc95ad6c097",
+      "coverage": "not exercised",
+      "note": "No type evolution operation exposed."
+    },
+    {
+      "id": "TYPE-ID-001",
+      "title": "Type identity",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "type-system.md",
+      "text_sha256": "06618a705965ad26fe198a2b475ba68badb21db31eca5ce996ec95b3c85eea06"
+    },
+    {
+      "id": "TYPE-VERSION-001",
+      "title": "Distinct type revision",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "type-system.md",
+      "text_sha256": "28836485305539f54d7a69d214b583e7a661abc6983dc0f78788b25761e7c044"
+    },
+    {
+      "id": "TYPE-BIND-001",
+      "title": "Stable type-version binding",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "type-system.md",
+      "text_sha256": "4768b92efcaf61e69ad11bf5026f6ec591606c41046d509752a8fa8a3a9ff390"
+    },
+    {
+      "id": "TYPE-SUPPORT-001",
+      "title": "Type-version coexistence and explicit support",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "type-system.md",
+      "text_sha256": "202e11da1ead03c5e3e4f32544d1b129e390b9e4c228a6584275d460e44b6733"
+    },
+    {
+      "id": "TYPE-SEM-001",
+      "title": "Discoverable semantics",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "type-system.md",
+      "text_sha256": "5fbe52b837d8759668448abab1dee564f70e57a932fc954b7d9688b12e654db3",
+      "coverage": "not exercised",
+      "note": "No type-semantics discovery operation is exposed on this surface."
+    },
+    {
+      "id": "TYPE-VALID-001",
+      "title": "Declared rules govern acceptance",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "type-system.md",
+      "text_sha256": "d9a1cdf882f3c21c42916fbb24ff864d5b28a4c6f3f661d804676691999f5a00"
+    },
+    {
+      "id": "TYPE-EXT-001",
+      "title": "Independent business types",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "type-system.md",
+      "text_sha256": "43c4c523bc6c5a7cd640213b6cee4c6c5c4166473494ee0e32991f8467582a35"
+    },
+    {
+      "id": "OP-CTX-001",
+      "title": "Sufficient operation context",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "operations.md",
+      "text_sha256": "3f6be034397d052c2a3f93a82d6d03696df3a39bc31e9c88caf04cac2e9bc8ee",
+      "note": "Checked indirectly: every request carries actor and target."
+    },
+    {
+      "id": "OP-OUTCOME-001",
+      "title": "Distinguishable outcomes",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "operations.md",
+      "text_sha256": "0ef639372807b02e50151b4edda55ac1d09234af2053491d256836fe58f989c3"
+    },
+    {
+      "id": "OP-ACCEPT-001",
+      "title": "Acceptance boundary",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "operations.md",
+      "text_sha256": "4cced948e18f78bc2fd8b8600b994f3adff0d79aa5e6ad93a6a22c0df3164ba5"
+    },
+    {
+      "id": "OP-NOCHANGE-001",
+      "title": "Non-accepted attempts",
+      "level": "MUST",
+      "spec_status": "MATERIALLY_CHANGED",
+      "file": "operations.md",
+      "text_sha256": "92ce252f818ec92ea98cda8778ae58d0067d374b45a81e4f79f118f3a5fca0e1"
+    },
+    {
+      "id": "OP-HIST-001",
+      "title": "Accepted mutation history",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "operations.md",
+      "text_sha256": "6aa3e0c751644bc540102a94cd9252f05be8fced4bee5b875e28f25ad3e3670f"
+    },
+    {
+      "id": "AUTH-BASE-001",
+      "title": "Authority before mutation",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "authorization.md",
+      "text_sha256": "f23e740b6d490d2f42b6b21482760873efc7d09ce83d64aee30979e5c2dcace6"
+    },
+    {
+      "id": "AUTH-NARROW-001",
+      "title": "No downstream expansion",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "authorization.md",
+      "text_sha256": "9dae1acf64e8c8029e38d2f2e07aff173db9f7e80c80af4a28a8e80a0b8af6ef",
+      "coverage": "not exercised",
+      "note": "No authority-bearing downstream context on this surface."
+    },
+    {
+      "id": "AUTH-APP-001",
+      "title": "Application-bound authority",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "authorization.md",
+      "text_sha256": "a65caed836d777662ecb8dd81b343d9ba8e7c2d5996fb1e18a123328dc09090b",
+      "coverage": "not exercised",
+      "note": "Application Context is not exposed by either adapter; no scenario."
+    },
+    {
+      "id": "AUTH-QUERY-001",
+      "title": "Authorized disclosure",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "authorization.md",
+      "text_sha256": "e8f0688f701e401288efeacd0c2f573ff4a3db4cc79f7bf077fd4c9a20cc36d8"
+    },
+    {
+      "id": "AUTH-GRAPH-001",
+      "title": "No inaccessible traversal bridge",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "authorization.md",
+      "text_sha256": "8448de402cc95e3c13f1359f3fd1b34acdfb02c3136857e7677ffe9c850b625a",
+      "coverage": "not exercised",
+      "note": "No graph traversal exposed on this surface."
+    },
+    {
+      "id": "AUTH-DISCLOSE-001",
+      "title": "Disclosure-safe rejection",
+      "level": "MUST",
+      "spec_status": "NEW",
+      "file": "authorization.md",
+      "text_sha256": "f10f105b1731a438158ac2f2f70b6d2c329b2d9653d815b8244d4e8e95c7720c"
+    },
+    {
+      "id": "AUTH-ORDER-001",
+      "title": "Authorization-first evaluation",
+      "level": "SHOULD",
+      "spec_status": "NEW",
+      "file": "authorization.md",
+      "text_sha256": "9bd4804b3f1c357c174f27876c90c908e184851afaaf4f8e25e16e5676d019bd"
+    },
+    {
+      "id": "CON-VERSION-001",
+      "title": "Canonical version token",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "concurrency.md",
+      "text_sha256": "a61f81b9cf941bdade19222bf70e6d39f9ff210b7a0577f28d5f57c2f8989945"
+    },
+    {
+      "id": "CON-CONFLICT-001",
+      "title": "Stale mutation conflict",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "concurrency.md",
+      "text_sha256": "916bf225f0d699a527a125a21ef26ff78bbdcf4dba3dce4e25f6b7e3f95b9230"
+    },
+    {
+      "id": "CON-ADVANCE-001",
+      "title": "Accepted mutation advances revision",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "concurrency.md",
+      "text_sha256": "9e4deb9e3fcec860ebbb559ca55677db147120d4f6a82f29176c6766f59204b7"
+    },
+    {
+      "id": "CON-NOADVANCE-001",
+      "title": "Non-accepted attempts do not advance",
+      "level": "MUST",
+      "spec_status": "MATERIALLY_CHANGED",
+      "file": "concurrency.md",
+      "text_sha256": "7ec78eebdf9ca996e1b60272652a6bb42d943aa219428b8329d45ac4e2dde118"
+    },
+    {
+      "id": "CON-UNIQUE-001",
+      "title": "Revision-unique Object Version",
+      "level": "MUST",
+      "spec_status": "NEW",
+      "file": "concurrency.md",
+      "text_sha256": "127b13e7156435d00d6760391246a674bb48cc5442336a3e070491ff5dec7953"
+    },
+    {
+      "id": "EVT-ACCEPT-001",
+      "title": "Canonical events represent acceptance",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "events.md",
+      "text_sha256": "debc555fdc4db2fe2a48e06c346f2079506de4c87fd368c629dfc363b67aaf98"
+    },
+    {
+      "id": "EVT-CONTENT-001",
+      "title": "Sufficient accepted-change semantics",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "events.md",
+      "text_sha256": "d5821a16b83dd7fd02cadbffa969bccc0e806eb2c51abd04539ade01374ca4ad"
+    },
+    {
+      "id": "EVT-SEPARATE-001",
+      "title": "Operational evidence remains separate",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "events.md",
+      "text_sha256": "f7fb3697904bfa4a3516e62c8ecc9e2f8743d4a24ff2a15a976b17685bef3a68"
+    },
+    {
+      "id": "EVT-BASELINE-001",
+      "title": "Replay Baseline",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "events.md",
+      "text_sha256": "05b5af9f45c7662004e81463ad35a45681e346eb9b1e327505c53fbaea604e71"
+    },
+    {
+      "id": "EVT-REPLAY-001",
+      "title": "Provider-independent replay",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "events.md",
+      "text_sha256": "b2d8130b1e9a52ff870b51a807bc932dd8d54722eaa58702374f294a10d3244f"
+    },
+    {
+      "id": "EVT-ORDER-001",
+      "title": "Deterministic per-object order",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "events.md",
+      "text_sha256": "9dbb5153c68afec40f011777111e18a6a37f76c7c42434251acc4619d558f8b7",
+      "note": "Native timestamp independence (D22-CS4-003) NOT EXECUTABLE: no clock hook on either runtime."
+    },
+    {
+      "id": "EVT-OBS-001",
+      "title": "Accepted observations enter history",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "events.md",
+      "text_sha256": "77857dc059dc61ceddeebbe736fc8212e881cc1a5dfe21a4f7911222339be9d8",
+      "coverage": "not exercised",
+      "note": "External observation ingestion is not exposed on this surface."
+    },
+    {
+      "id": "EVT-REPAIR-001",
+      "title": "Synchronization does not invent history",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "events.md",
+      "text_sha256": "926502389ce55b4fae7a554c2803da469ccd087658901e808b642a17db4d6385",
+      "coverage": "not exercised",
+      "note": "Provider synchronization is not exposed on this surface."
+    },
+    {
+      "id": "REL-EDGE-001",
+      "title": "Typed canonical edge",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "07e8bc76d2319787bbccab985f6698125d68fe6a647715ca477fccdd2d151f67"
+    },
+    {
+      "id": "REL-EQUAL-001",
+      "title": "Relationship equality",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "32111989e2ddd71774d01163aecc6cfbd52458061af3b743793520691d7fb52a"
+    },
+    {
+      "id": "REL-MULT-001",
+      "title": "Set multiplicity",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "9bb42047021ed26db8d39bc3094a5416c5d5bb532486511584aae0d23949c5da"
+    },
+    {
+      "id": "REL-ORDER-001",
+      "title": "Unordered collection",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "af090d8cab2e2d3082acd4d840d381a09370aec4773f99a678294c0db235c5bb"
+    },
+    {
+      "id": "REL-OWNER-001",
+      "title": "Source ownership",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "7c0b25668a867445dafde3cd310255af02027af7df7f1db2b45ab15911cbebbd"
+    },
+    {
+      "id": "REL-ACCEPT-001",
+      "title": "Governed relationship acceptance",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "1ab3f7eedfc1eee83a1b230293079b24bfc7ff36fe3af451678490c09238cf0d"
+    },
+    {
+      "id": "REL-REMOVE-001",
+      "title": "Governed relationship removal",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "473a92aa86be16ab8198dc637893d0739cd1f1e3d4fca42e26693d6609c535d0"
+    },
+    {
+      "id": "REL-NOOP-001",
+      "title": "Accepted relationship no-op",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "b46410dff06bba426a56b6b3753a2229def3c1466bacf513c83ce6dbcdfc9a75"
+    },
+    {
+      "id": "REL-DUP-001",
+      "title": "Duplicate relationship add",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "6e8dd4db24ab6c96423ddcab9a9e3127ef58269d87c1edcc312019cf21aad859"
+    },
+    {
+      "id": "REL-ABSENT-001",
+      "title": "Absent relationship removal",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "a4ee11ed30d617e804cd8faf75392401fca4a44c53403e4228d065e17341b236"
+    },
+    {
+      "id": "REL-AUTH-001",
+      "title": "Authorization independent of effect",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "d15b023651da2d8f975b74f4491c7fd3810616e1e69f734b92a9feb55144f4e5"
+    },
+    {
+      "id": "REL-PRECOND-001",
+      "title": "Stale requests conflict regardless of effect",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "9102b3e77739c714224e184f3d3f6c6bf728604bdf7d70d6f0fdec9568c9a674"
+    },
+    {
+      "id": "REL-PRECEDENCE-001",
+      "title": "Rejection precedes no-op",
+      "level": "MUST",
+      "spec_status": "MATERIALLY_CHANGED",
+      "file": "relationships.md",
+      "text_sha256": "fa138d60f3ff46052d5f94a1c1b1395dee6a87f36ac2de37db2345bb5e6c46e6"
+    },
+    {
+      "id": "REL-REPLAY-001",
+      "title": "Relationship history and set replay",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "relationships.md",
+      "text_sha256": "8c9632c96c900c362861f458d949dd7240fb0031714786e69c85e93e8e490dbe"
+    },
+    {
+      "id": "REL-PORT-001",
+      "title": "Relationship portability",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "04822b3c1c256c5b55461da8dceeb338a2e60e13694894bd0d9988602cc2a243",
+      "coverage": "not exercised",
+      "note": "No export or transfer claim on this surface; restoration is a harness path only."
+    },
+    {
+      "id": "REL-PORT-002",
+      "title": "Portable relationship-set content",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "b5262e8e599f0154c1b13fd5b1b8441e24705de4c034e8c81385c73fc3e3be2f",
+      "coverage": "not exercised",
+      "note": "No export or transfer claim on this surface; restoration is a harness path only."
+    },
+    {
+      "id": "REL-COMPAT-001",
+      "title": "Relationship data produced under multiset semantics",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "3fa21ac84900b8998293fe8d470eb41b3879c572a0960fbb54f1128541499c7f",
+      "coverage": "not exercised",
+      "note": "No multiset-era data import on this surface."
+    },
+    {
+      "id": "REL-TRAVERSE-001",
+      "title": "Authorized traversal",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "relationships.md",
+      "text_sha256": "6fb7d7647fd52f1ccf9c2181b120e21c4a6188808d923971cf5b2dcbb7005468",
+      "coverage": "not exercised",
+      "note": "No traversal exposed on this surface."
+    },
+    {
+      "id": "PORT-SEM-001",
+      "title": "Portable semantic content",
+      "level": "MUST",
+      "spec_status": "CLARIFIED",
+      "file": "portability.md",
+      "text_sha256": "9624fec1ef60664787f4626209c5e0a5e0ab67042f24b0c0007e0db46a949767",
+      "coverage": "not exercised",
+      "note": "No export or transfer claim on this surface. Restored-content preservation is checked under PORT-PRESERVE-001."
+    },
+    {
+      "id": "PORT-APP-001",
+      "title": "Application replacement",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "portability.md",
+      "text_sha256": "3f42fca3a55df6ca082cc094c5d89b8a6f712e5b25dd7234aa1052333ce81d52",
+      "coverage": "not exercised",
+      "note": "Application replacement is not exposed on this surface."
+    },
+    {
+      "id": "PORT-RUNTIME-001",
+      "title": "Runtime independence",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "portability.md",
+      "text_sha256": "a0d3066282ad8316c2483fff485fc6d55675d62a74e04d307025e9ed57ec6fc3",
+      "coverage": "not exercised",
+      "note": "Runtime replacement is not a single-implementation black-box check."
+    },
+    {
+      "id": "PORT-EVOL-001",
+      "title": "Explicit portable evolution",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "portability.md",
+      "text_sha256": "a03acd17865b210f6764a7d72883c36711259884363c0d735b6e239296133e48",
+      "coverage": "not exercised",
+      "note": "No governed migration operation exposed."
+    },
+    {
+      "id": "PORT-PROVIDER-001",
+      "title": "Profile preservation",
+      "level": "MUST",
+      "spec_status": "UNCHANGED",
+      "file": "portability.md",
+      "text_sha256": "4f62999f34d6c4209922a68b4e6e54e443f6411193393597f3f7ac83b7c8e829",
+      "coverage": "not exercised",
+      "note": "No provider profile claimed."
+    },
+    {
+      "id": "PORT-RESTORE-001",
+      "title": "Restoration is not a canonical change",
+      "level": "MUST",
+      "spec_status": "NEW",
+      "file": "portability.md",
+      "text_sha256": "224c8016364191d54f067a7be027af78650ed01df3e6783ca45edf067b7a6b2f"
+    },
+    {
+      "id": "PORT-PRESERVE-001",
+      "title": "Faithful preservation or explicit refusal",
+      "level": "MUST",
+      "spec_status": "NEW",
+      "file": "portability.md",
+      "text_sha256": "bb18e5be0b1d9a50a50b64eeb6046615be7348c0acf3d46401fac7b85e98b0dc"
+    },
+    {
+      "id": "CONF-CLAIM-001",
+      "title": "Declared conformance scope",
+      "level": "MUST",
+      "spec_status": "MATERIALLY_CHANGED",
+      "file": "conformance.md",
+      "text_sha256": "d9a51920a5992e26581cb4dba322979565d9dc224f8309c7e0fdd0486647d754",
+      "coverage": "declaration",
+      "note": "Documentation claim; the report states the claim scope."
+    }
+  ]
+}

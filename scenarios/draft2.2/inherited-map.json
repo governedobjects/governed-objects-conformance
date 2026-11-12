@@ -1,0 +1,549 @@
+{
+  "description": "Draft 2.2 disposition of each inherited Draft 2 / Draft 2.1 scenario. Inherited scenario files are unchanged.",
+  "dispositions": [
+    "unchanged",
+    "clarified",
+    "superseded",
+    "conditionality-changed"
+  ],
+  "scenarios": {
+    "C-AUTH-001": {
+      "source": "scenarios/core/authorization/C-AUTH-001.json",
+      "draft22_requirements": [
+        "AUTH-BASE-001",
+        "OP-ACCEPT-001",
+        "OP-CTX-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: AUTH-BASE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-AUTH-002": {
+      "source": "scenarios/core/authorization/C-AUTH-002.json",
+      "draft22_requirements": [
+        "AUTH-BASE-001",
+        "OP-NOCHANGE-001",
+        "OP-OUTCOME-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: AUTH-BASE-001, OP-NOCHANGE-001, OP-OUTCOME-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-CON-001": {
+      "source": "scenarios/core/concurrency/C-CON-001.json",
+      "draft22_requirements": [
+        "CON-CONFLICT-001",
+        "CON-NOADVANCE-001",
+        "OP-NOCHANGE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-CONFLICT-001, CON-NOADVANCE-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates mutable_objects are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-CON-002": {
+      "source": "scenarios/core/concurrency/C-CON-002.json",
+      "draft22_requirements": [
+        "CON-CONFLICT-001",
+        "CON-NOADVANCE-001",
+        "OP-NOCHANGE-001",
+        "REL-ACCEPT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-CONFLICT-001, CON-NOADVANCE-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates mutable_objects, relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-CON-003": {
+      "source": "scenarios/core/concurrency/C-CON-003.json",
+      "draft22_requirements": [
+        "REL-ACCEPT-001",
+        "CON-ADVANCE-001",
+        "CON-CONFLICT-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-ADVANCE-001, CON-CONFLICT-001, CON-NOADVANCE-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates mutable_objects, relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-CON-005": {
+      "source": "scenarios/core/concurrency/C-CON-005.json",
+      "draft22_requirements": [
+        "CON-VERSION-001"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2. Capability gates mutable_objects, unconditional_mutation are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-VER-001": {
+      "source": "scenarios/core/concurrency/C-VER-001.json",
+      "draft22_requirements": [
+        "CON-ADVANCE-001",
+        "CON-VERSION-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-ADVANCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates mutable_objects are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-EVT-001": {
+      "source": "scenarios/core/history/C-EVT-001.json",
+      "draft22_requirements": [
+        "CORE-HIST-001",
+        "OP-HIST-001",
+        "EVT-CONTENT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CORE-HIST-001, EVT-CONTENT-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-EVT-002": {
+      "source": "scenarios/core/history/C-EVT-002.json",
+      "draft22_requirements": [
+        "EVT-ACCEPT-001",
+        "EVT-SEPARATE-001",
+        "EVT-CONTENT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: EVT-CONTENT-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-EVT-003": {
+      "source": "scenarios/core/history/C-EVT-003.json",
+      "draft22_requirements": [
+        "EVT-ORDER-001",
+        "EVT-CONTENT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: EVT-CONTENT-001, EVT-ORDER-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-ID-001": {
+      "source": "scenarios/core/identity/C-ID-001.json",
+      "draft22_requirements": [
+        "CORE-ID-001",
+        "CORE-ID-002"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2."
+    },
+    "C-ID-002": {
+      "source": "scenarios/core/identity/C-ID-002.json",
+      "draft22_requirements": [
+        "CORE-ID-001",
+        "CORE-ID-002"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2."
+    },
+    "C-LIFE-001": {
+      "source": "scenarios/core/lifecycle/C-LIFE-001.json",
+      "draft22_requirements": [
+        "OP-ACCEPT-001",
+        "TYPE-VALID-001"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2."
+    },
+    "C-LIFE-002": {
+      "source": "scenarios/core/lifecycle/C-LIFE-002.json",
+      "draft22_requirements": [
+        "OP-ACCEPT-001",
+        "TYPE-VALID-001"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2."
+    },
+    "C-LIFE-003": {
+      "source": "scenarios/core/lifecycle/C-LIFE-003.json",
+      "draft22_requirements": [
+        "TYPE-VALID-001",
+        "OP-NOCHANGE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-OP-001": {
+      "source": "scenarios/core/operations/C-OP-001.json",
+      "draft22_requirements": [
+        "OP-OUTCOME-001",
+        "OP-ACCEPT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: OP-OUTCOME-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-OP-002": {
+      "source": "scenarios/core/operations/C-OP-002.json",
+      "draft22_requirements": [
+        "OP-OUTCOME-001",
+        "AUTH-BASE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: AUTH-BASE-001, OP-OUTCOME-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-OP-003": {
+      "source": "scenarios/core/operations/C-OP-003.json",
+      "draft22_requirements": [
+        "OP-OUTCOME-001",
+        "TYPE-VALID-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: OP-OUTCOME-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-OP-004": {
+      "source": "scenarios/core/operations/C-OP-004.json",
+      "draft22_requirements": [
+        "OP-OUTCOME-001",
+        "CON-CONFLICT-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-CONFLICT-001, CON-NOADVANCE-001, OP-NOCHANGE-001, OP-OUTCOME-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates mutable_objects are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-PORT-001": {
+      "source": "scenarios/core/portability/C-PORT-001.json",
+      "draft22_requirements": [
+        "TYPE-ID-001",
+        "TYPE-EXT-001",
+        "CORE-STATE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2. Capability gates semantic_portability_view are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-001": {
+      "source": "scenarios/core/relationships/C-REL-001.json",
+      "draft22_requirements": [
+        "REL-ACCEPT-001",
+        "REL-EDGE-001",
+        "CON-ADVANCE-001",
+        "OP-HIST-001",
+        "EVT-CONTENT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-ADVANCE-001, EVT-CONTENT-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-002": {
+      "source": "scenarios/core/relationships/C-REL-002.json",
+      "draft22_requirements": [
+        "REL-REMOVE-001",
+        "OP-HIST-001",
+        "CON-ADVANCE-001",
+        "EVT-REPLAY-001"
+      ],
+      "modality": "MUST",
+      "disposition": "conditionality-changed",
+      "claim_capabilities": [
+        "replay"
+      ],
+      "trigger": "canonical-history replay claimed (EVT-REPLAY-001)",
+      "note": "Replay gate is now a claim-based trigger: absent claim gives NOT APPLICABLE, never SKIP or PASS. Requirements clarified in Draft 2.2: CON-ADVANCE-001; expectations unchanged."
+    },
+    "C-REL-003": {
+      "source": "scenarios/core/relationships/C-REL-003.json",
+      "draft22_requirements": [
+        "REL-ACCEPT-001",
+        "CON-ADVANCE-001",
+        "OP-HIST-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-ADVANCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-004": {
+      "source": "scenarios/core/relationships/C-REL-004.json",
+      "draft22_requirements": [
+        "CORE-HIST-001",
+        "OP-HIST-001",
+        "EVT-CONTENT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CORE-HIST-001, EVT-CONTENT-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-005": {
+      "source": "scenarios/core/relationships/C-REL-005.json",
+      "draft22_requirements": [
+        "EVT-REPLAY-001",
+        "REL-ACCEPT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "conditionality-changed",
+      "claim_capabilities": [
+        "replay"
+      ],
+      "trigger": "canonical-history replay claimed (EVT-REPLAY-001)",
+      "note": "Replay gate is now a claim-based trigger: absent claim gives NOT APPLICABLE, never SKIP or PASS."
+    },
+    "C-REL-006": {
+      "source": "scenarios/core/relationships/C-REL-006.json",
+      "draft22_requirements": [
+        "REL-REMOVE-001",
+        "AUTH-BASE-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: AUTH-BASE-001, CON-NOADVANCE-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add, relationship_remove are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-007": {
+      "source": "scenarios/core/relationships/C-REL-007.json",
+      "draft22_requirements": [
+        "REL-REMOVE-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-NOADVANCE-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add, relationship_remove are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-008": {
+      "source": "scenarios/core/relationships/C-REL-008.json",
+      "draft22_requirements": [
+        "REL-REMOVE-001",
+        "CON-CONFLICT-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-CONFLICT-001, CON-NOADVANCE-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add, relationship_remove are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REPLAY-001": {
+      "source": "scenarios/core/replay/C-REPLAY-001.json",
+      "draft22_requirements": [
+        "EVT-REPLAY-001",
+        "EVT-BASELINE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "conditionality-changed",
+      "claim_capabilities": [
+        "replay"
+      ],
+      "trigger": "canonical-history replay claimed (EVT-REPLAY-001)",
+      "note": "Replay gate is now a claim-based trigger: absent claim gives NOT APPLICABLE, never SKIP or PASS. Requirements clarified in Draft 2.2: EVT-BASELINE-001; expectations unchanged."
+    },
+    "C-STATE-001": {
+      "source": "scenarios/core/state/C-STATE-001.json",
+      "draft22_requirements": [
+        "CORE-STATE-001",
+        "CORE-STATE-002",
+        "OP-ACCEPT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2."
+    },
+    "C-STATE-002": {
+      "source": "scenarios/core/state/C-STATE-002.json",
+      "draft22_requirements": [
+        "CORE-STATE-002",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-NOADVANCE-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-STATE-003": {
+      "source": "scenarios/core/state/C-STATE-003.json",
+      "draft22_requirements": [
+        "CORE-STATE-002",
+        "OP-NOCHANGE-001",
+        "TYPE-VALID-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-STATE-004": {
+      "source": "scenarios/core/state/C-STATE-004.json",
+      "draft22_requirements": [
+        "CORE-STATE-002",
+        "OP-NOCHANGE-001",
+        "CON-CONFLICT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-CONFLICT-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates mutable_objects are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-TYPE-001": {
+      "source": "scenarios/core/types/C-TYPE-001.json",
+      "draft22_requirements": [
+        "TYPE-ID-001",
+        "TYPE-VERSION-001"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2."
+    },
+    "C-TYPE-002": {
+      "source": "scenarios/core/types/C-TYPE-002.json",
+      "draft22_requirements": [
+        "TYPE-VERSION-001",
+        "TYPE-BIND-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: TYPE-BIND-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-TYPE-003": {
+      "source": "scenarios/core/types/C-TYPE-003.json",
+      "draft22_requirements": [
+        "TYPE-SUPPORT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "superseded",
+      "superseded_by": "D22-TYPE-001",
+      "note": "Draft 2.1 gated TYPE-SUPPORT-001 on an optional unsupported_type_version_refusal capability that no adapter declared (SKIP-CONDITIONAL). Draft 2.2 exercises it through restoration of an object bound to an unsupported Type Version, which is executable on both surfaces."
+    },
+    "C-VALID-001": {
+      "source": "scenarios/core/validation/C-VALID-001.json",
+      "draft22_requirements": [
+        "TYPE-VALID-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-NOADVANCE-001, OP-NOCHANGE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-VALID-002": {
+      "source": "scenarios/core/validation/C-VALID-002.json",
+      "draft22_requirements": [
+        "OP-OUTCOME-001",
+        "TYPE-VALID-001",
+        "AUTH-BASE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: AUTH-BASE-001, OP-OUTCOME-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios."
+    },
+    "C-REL-009": {
+      "source": "scenarios/draft2.1/relationships/C-REL-009.json",
+      "draft22_requirements": [
+        "REL-DUP-001",
+        "REL-NOOP-001",
+        "REL-MULT-001",
+        "CON-NOADVANCE-001",
+        "OP-HIST-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-NOADVANCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-010": {
+      "source": "scenarios/draft2.1/relationships/C-REL-010.json",
+      "draft22_requirements": [
+        "REL-ABSENT-001",
+        "REL-NOOP-001",
+        "CON-NOADVANCE-001",
+        "OP-HIST-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-NOADVANCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_remove are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-011": {
+      "source": "scenarios/draft2.1/relationships/C-REL-011.json",
+      "draft22_requirements": [
+        "REL-AUTH-001",
+        "REL-PRECEDENCE-001",
+        "AUTH-BASE-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: AUTH-BASE-001, CON-NOADVANCE-001, OP-NOCHANGE-001, REL-PRECEDENCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-012": {
+      "source": "scenarios/draft2.1/relationships/C-REL-012.json",
+      "draft22_requirements": [
+        "REL-AUTH-001",
+        "REL-PRECEDENCE-001",
+        "AUTH-BASE-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: AUTH-BASE-001, CON-NOADVANCE-001, OP-NOCHANGE-001, REL-PRECEDENCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_remove are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-013": {
+      "source": "scenarios/draft2.1/relationships/C-REL-013.json",
+      "draft22_requirements": [
+        "REL-PRECOND-001",
+        "REL-PRECEDENCE-001",
+        "CON-CONFLICT-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-CONFLICT-001, CON-NOADVANCE-001, OP-NOCHANGE-001, REL-PRECEDENCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-014": {
+      "source": "scenarios/draft2.1/relationships/C-REL-014.json",
+      "draft22_requirements": [
+        "REL-PRECOND-001",
+        "REL-PRECEDENCE-001",
+        "CON-CONFLICT-001",
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-CONFLICT-001, CON-NOADVANCE-001, OP-NOCHANGE-001, REL-PRECEDENCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_remove are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-015": {
+      "source": "scenarios/draft2.1/relationships/C-REL-015.json",
+      "draft22_requirements": [
+        "REL-OWNER-001",
+        "CON-ADVANCE-001",
+        "CON-NOADVANCE-001"
+      ],
+      "modality": "MUST",
+      "disposition": "clarified",
+      "note": "Requirements clarified or materially changed in Draft 2.2: CON-ADVANCE-001, CON-NOADVANCE-001. The scenario's expected observations remain required; Draft 2.2 adds constraints checked by new scenarios. Capability gates relationship_add, relationship_remove are harness capabilities (NOT EXECUTABLE if absent)."
+    },
+    "C-REL-016": {
+      "source": "scenarios/draft2.1/relationships/C-REL-016.json",
+      "draft22_requirements": [
+        "REL-REPLAY-001",
+        "REL-NOOP-001",
+        "REL-DUP-001",
+        "REL-ABSENT-001",
+        "EVT-REPLAY-001"
+      ],
+      "modality": "MUST",
+      "disposition": "conditionality-changed",
+      "claim_capabilities": [
+        "replay"
+      ],
+      "trigger": "canonical-history replay claimed (EVT-REPLAY-001)",
+      "note": "Replay gate is now a claim-based trigger: absent claim gives NOT APPLICABLE, never SKIP or PASS. Requirements clarified in Draft 2.2: REL-REPLAY-001; expectations unchanged."
+    },
+    "C-REL-017": {
+      "source": "scenarios/draft2.1/relationships/C-REL-017.json",
+      "draft22_requirements": [
+        "REL-ORDER-001",
+        "REL-EQUAL-001",
+        "REL-MULT-001"
+      ],
+      "modality": "MUST",
+      "disposition": "unchanged",
+      "note": "All referenced requirements unchanged in Draft 2.2. Capability gates relationship_add are harness capabilities (NOT EXECUTABLE if absent)."
+    }
+  }
+}

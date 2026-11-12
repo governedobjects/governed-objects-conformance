@@ -1,0 +1,262 @@
+{
+  "id": "D22-CS2-WNR",
+  "title": "Requester with mutation authority but no read authority: non-accepted outcomes carry no protected content",
+  "cs": [
+    "CS-2"
+  ],
+  "requirements": [
+    "AUTH-DISCLOSE-001",
+    "CON-CONFLICT-001",
+    "OP-NOCHANGE-001"
+  ],
+  "modality": "MUST",
+  "steps": [
+    {
+      "op": "create",
+      "as": "cp",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs2-secret-p"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "p_m",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "changes": {
+        "title": "cs2-secret-p2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "transition",
+      "as": "p_t",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "to": "active",
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "add_relationship",
+      "as": "p_r",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "relationship": {
+        "type": "owned_by",
+        "target": "cs2-party-p"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "create",
+      "as": "cq",
+      "actor": "writer",
+      "object_id": "cs2-q",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs2-secret-q"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "q_m",
+      "actor": "writer",
+      "object_id": "cs2-q",
+      "changes": {
+        "title": "cs2-secret-q2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_p",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_q",
+      "object_id": "cs2-q"
+    },
+    {
+      "op": "mutate",
+      "as": "w_update_stale",
+      "actor": "writer-no-read",
+      "object_id": "cs2-p",
+      "changes": {
+        "title": "wnr-attempt"
+      },
+      "expected_version": "$cp.semantic_view.object_version"
+    },
+    {
+      "op": "mutate",
+      "as": "w_update_never",
+      "actor": "writer-no-read",
+      "object_id": "cs2-p",
+      "changes": {
+        "title": "wnr-attempt"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "transition",
+      "as": "w_invalid_transition",
+      "actor": "writer-no-read",
+      "object_id": "cs2-p",
+      "to": "draft"
+    },
+    {
+      "op": "transition",
+      "as": "w_invalid_transition_q",
+      "actor": "writer-no-read",
+      "object_id": "cs2-q",
+      "to": "completed"
+    },
+    {
+      "op": "add_relationship",
+      "as": "w_dup_stale",
+      "actor": "writer-no-read",
+      "object_id": "cs2-p",
+      "relationship": {
+        "type": "owned_by",
+        "target": "cs2-party-p"
+      },
+      "expected_version": "$cp.semantic_view.object_version"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "w_absent_stale",
+      "actor": "writer-no-read",
+      "object_id": "cs2-q",
+      "relationship": {
+        "type": "owned_by",
+        "target": "cs2-party-p"
+      },
+      "expected_version": "$cq.semantic_view.object_version"
+    },
+    {
+      "op": "mutate",
+      "as": "w_invalid_title",
+      "actor": "writer-no-read",
+      "object_id": "cs2-p",
+      "changes": {
+        "title": ""
+      }
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_p",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_q",
+      "object_id": "cs2-q"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_not": {
+        "steps": [
+          "w_update_stale",
+          "w_update_never",
+          "w_invalid_transition",
+          "w_dup_stale",
+          "w_invalid_title",
+          "w_invalid_transition_q",
+          "w_absent_stale"
+        ],
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001",
+        "TYPE-VALID-001",
+        "REL-PRECEDENCE-001"
+      ]
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "w_update_stale",
+          "w_update_never",
+          "w_invalid_transition",
+          "w_dup_stale",
+          "w_invalid_title"
+        ],
+        "protected_from": [
+          "cp",
+          "p_m",
+          "p_t",
+          "p_r",
+          "obs_p"
+        ]
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 1 (P)"
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "w_invalid_transition_q",
+          "w_absent_stale"
+        ],
+        "protected_from": [
+          "cq",
+          "q_m",
+          "obs_q"
+        ]
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 1 (Q)"
+    },
+    {
+      "observer_unchanged": {
+        "before": "obs_p",
+        "after": "after_p"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "obs_q",
+        "after": "after_q"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs2-p",
+        "history": "after_p"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "id": "C-REL-002",
+  "title": "Accepted relationship removal removes an existing canonical edge",
+  "requirements": [
+    "REL-REMOVE-001",
+    "OP-HIST-001",
+    "CON-ADVANCE-001",
+    "EVT-REPLAY-001"
+  ],
+  "requires_capabilities": {
+    "relationship_add": true,
+    "relationship_remove": true,
+    "replay": true
+  },
+  "skip_if_missing": [
+    "relationship_add",
+    "relationship_remove",
+    "replay"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-rel-002",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Rel"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "added",
+      "actor": "writer",
+      "object_id": "wi-rel-002",
+      "relationship": {
+        "type": "depends_on",
+        "target": "wi-other"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-rel-002"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-rel-002"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "removed",
+      "actor": "writer",
+      "object_id": "wi-rel-002",
+      "relationship": {
+        "type": "depends_on",
+        "target": "wi-other"
+      }
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-rel-002"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-rel-002"
+    },
+    {
+      "op": "replay",
+      "as": "replayed",
+      "object_id": "wi-rel-002"
+    }
+  ],
+  "assert": [
+    {
+      "step": "added",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_exists": {
+        "type": "depends_on",
+        "target": "wi-other"
+      },
+      "step": "before"
+    },
+    {
+      "step": "removed",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_absent": {
+        "type": "depends_on",
+        "target": "wi-other"
+      },
+      "step": "after"
+    },
+    {
+      "compare": "$removed.semantic_view.object_version",
+      "not_equals": "$before.semantic_view.object_version"
+    },
+    {
+      "history_contains": {
+        "effect": "relationship_removed",
+        "object_version": "$removed.semantic_view.object_version",
+        "relationship_type": "depends_on",
+        "relationship_target": "wi-other"
+      },
+      "step": "history_after"
+    },
+    {
+      "step": "replayed",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_absent": {
+        "type": "depends_on",
+        "target": "wi-other"
+      },
+      "step": "replayed"
+    }
+  ]
+}

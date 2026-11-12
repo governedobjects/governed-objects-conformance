@@ -1,0 +1,117 @@
+{
+  "id": "C-CON-003",
+  "title": "Accepted relationship add makes prior version stale for state mutation",
+  "requirements": [
+    "REL-ACCEPT-001",
+    "CON-ADVANCE-001",
+    "CON-CONFLICT-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "requires_capabilities": {
+    "relationship_add": true,
+    "mutable_objects": true
+  },
+  "skip_if_missing": [
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-con-003",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Rel"
+      }
+    },
+    {
+      "op": "read",
+      "as": "v1",
+      "actor": "writer",
+      "object_id": "wi-con-003"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-con-003"
+    },
+    {
+      "op": "add_relationship",
+      "as": "rel",
+      "actor": "writer",
+      "object_id": "wi-con-003",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-1"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "mutate",
+      "as": "stale_state",
+      "actor": "writer",
+      "object_id": "wi-con-003",
+      "changes": {
+        "title": "Late"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-con-003"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-con-003"
+    }
+  ],
+  "assert": [
+    {
+      "step": "rel",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_exists": {
+        "type": "owned_by",
+        "target": "party-1"
+      },
+      "step": "rel"
+    },
+    {
+      "compare": "$rel.semantic_view.object_version",
+      "not_equals": "$v1.semantic_view.object_version"
+    },
+    {
+      "step": "stale_state",
+      "outcome": "CONFLICT"
+    },
+    {
+      "relationship_exists": {
+        "type": "owned_by",
+        "target": "party-1"
+      },
+      "step": "after"
+    },
+    {
+      "compare": "$after.semantic_view.accepted_state.title",
+      "equals": "Rel"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$rel.semantic_view.object_version"
+    },
+    {
+      "history_contains": {
+        "effect": "relationship_added",
+        "object_version": "$rel.semantic_view.object_version",
+        "relationship_type": "owned_by",
+        "relationship_target": "party-1"
+      },
+      "step": "history_after"
+    }
+  ]
+}

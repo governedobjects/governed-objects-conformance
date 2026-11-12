@@ -1,0 +1,171 @@
+{
+  "id": "D22-CS6-001",
+  "title": "Actor named in history whose grant was revoked is denied after restart",
+  "cs": [
+    "CS-6",
+    "CS-7"
+  ],
+  "requirements": [
+    "AUTH-BASE-001",
+    "CORE-LINEAGE-001"
+  ],
+  "modality": "MUST",
+  "harness_requires": [
+    {
+      "capability": "restart"
+    },
+    {
+      "capability": "governance_reconfiguration"
+    }
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "former-writer",
+      "object_id": "cs6-a",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs6-by-former"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "m",
+      "actor": "former-writer",
+      "object_id": "cs6-a",
+      "changes": {
+        "title": "cs6-by-former-2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h_before",
+      "object_id": "cs6-a"
+    },
+    {
+      "op": "restart",
+      "as": "restart",
+      "revoke": [
+        "former-writer"
+      ],
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h_after_restart",
+      "object_id": "cs6-a"
+    },
+    {
+      "op": "mutate",
+      "as": "denied_update",
+      "actor": "former-writer",
+      "object_id": "cs6-a",
+      "changes": {
+        "title": "cs6-after"
+      },
+      "expected_version": "$h_after_restart.semantic_view.object_version"
+    },
+    {
+      "op": "transition",
+      "as": "denied_transition",
+      "actor": "former-writer",
+      "object_id": "cs6-a",
+      "to": "active",
+      "expected_version": "$h_after_restart.semantic_view.object_version"
+    },
+    {
+      "op": "add_relationship",
+      "as": "denied_rel",
+      "actor": "former-writer",
+      "object_id": "cs6-a",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-cs6"
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "h_final",
+      "object_id": "cs6-a"
+    }
+  ],
+  "assert": [
+    {
+      "history_contains": {
+        "actor": "former-writer"
+      },
+      "step": "h_after_restart",
+      "label": "actor is in history"
+    },
+    {
+      "outcome_in": {
+        "step": "denied_update",
+        "outcomes": [
+          "AUTHORIZATION_DENIED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "denied_transition",
+        "outcomes": [
+          "AUTHORIZATION_DENIED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "denied_rel",
+        "outcomes": [
+          "AUTHORIZATION_DENIED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "h_before",
+        "after": "h_after_restart"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ],
+      "label": "restart accepts no change"
+    },
+    {
+      "observer_unchanged": {
+        "before": "h_after_restart",
+        "after": "h_final"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs6-a",
+        "history": "h_final"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    }
+  ]
+}

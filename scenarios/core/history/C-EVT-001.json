@@ -1,0 +1,73 @@
+{
+  "id": "C-EVT-001",
+  "title": "Accepted canonical changes appear in canonical history",
+  "requirements": [
+    "CORE-HIST-001",
+    "OP-HIST-001",
+    "EVT-CONTENT-001"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-evt-001",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "H1"
+      }
+    },
+    {
+      "op": "mutate",
+      "actor": "writer",
+      "object_id": "wi-evt-001",
+      "changes": {
+        "title": "H2"
+      }
+    },
+    {
+      "op": "transition",
+      "actor": "writer",
+      "object_id": "wi-evt-001",
+      "to": "active"
+    },
+    {
+      "op": "get_history",
+      "as": "history",
+      "object_id": "wi-evt-001"
+    }
+  ],
+  "assert": [
+    {
+      "history_accepted_count": 3,
+      "step": "history"
+    },
+    {
+      "history_all_fields_not_null": [
+        "effect",
+        "canonical_identity",
+        "type_identity",
+        "type_version",
+        "object_version"
+      ],
+      "step": "history"
+    },
+    {
+      "history_contains": {
+        "effect": "object_created"
+      },
+      "step": "history"
+    },
+    {
+      "history_contains": {
+        "effect": "state_updated"
+      },
+      "step": "history"
+    },
+    {
+      "history_contains": {
+        "effect": "lifecycle_transition"
+      },
+      "step": "history"
+    }
+  ]
+}

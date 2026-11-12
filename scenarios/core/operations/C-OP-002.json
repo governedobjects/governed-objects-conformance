@@ -1,0 +1,72 @@
+{
+  "id": "C-OP-002",
+  "title": "Insufficient authority yields AUTHORIZATION_DENIED",
+  "requirements": [
+    "OP-OUTCOME-001",
+    "AUTH-BASE-001"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-op-002",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "OK"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-op-002"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-op-002"
+    },
+    {
+      "op": "mutate",
+      "as": "denied",
+      "actor": "reader",
+      "object_id": "wi-op-002",
+      "changes": {
+        "title": "Nope"
+      }
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-op-002"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-op-002"
+    }
+  ],
+  "assert": [
+    {
+      "step": "denied",
+      "outcome": "AUTHORIZATION_DENIED"
+    },
+    {
+      "compare": "$after.semantic_view.accepted_state",
+      "equals": "$before.semantic_view.accepted_state"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "after"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "compare": "$history_after.canonical_history",
+      "equals": "$history_before.canonical_history"
+    }
+  ]
+}

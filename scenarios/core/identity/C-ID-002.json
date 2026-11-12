@@ -1,0 +1,14 @@
+{
+  "id": "C-ID-002",
+  "title": "Separately created objects have distinct canonical identities",
+  "requirements": ["CORE-ID-001", "CORE-ID-002"],
+  "steps": [
+    {"op": "create", "as": "a", "actor": "writer", "object_id": "wi-id-a", "type": "conformance.work-item", "initial_state": {"title": "A"}},
+    {"op": "create", "as": "b", "actor": "writer", "object_id": "wi-id-b", "type": "conformance.work-item", "initial_state": {"title": "B"}}
+  ],
+  "assert": [
+    {"compare": "$a.semantic_view.canonical_identity", "equals": "wi-id-a"},
+    {"compare": "$b.semantic_view.canonical_identity", "equals": "wi-id-b"},
+    {"compare": "$a.semantic_view.canonical_identity", "not_equals": "$b.semantic_view.canonical_identity"}
+  ]
+}

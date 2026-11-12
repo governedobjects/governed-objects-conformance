@@ -1,0 +1,268 @@
+{
+  "id": "D22-CS9-002",
+  "title": "Restored sparse tokens: never-issued and stale tokens are not accepted; a fresh token is unique",
+  "cs": [
+    "CS-9",
+    "CS-7"
+  ],
+  "requirements": [
+    "CON-CONFLICT-001",
+    "CON-UNIQUE-001",
+    "CORE-LINEAGE-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "declared restoration capability (restoration: true, restorable_types contains conformance.record)",
+    "claims": [
+      {
+        "capability": "restoration"
+      },
+      {
+        "capability": "restorable_types",
+        "contains": "conformance.record"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "restore",
+      "as": "r",
+      "actor": "restorer",
+      "objects": [
+        {
+          "canonical_identity": "cs9r-a",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs9r-a-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-cs9r-a"
+            }
+          ],
+          "current_object_version": "7300444",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "7300421",
+              "post_image": {
+                "title": "cs9r-a-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "7300430",
+              "post_image": {
+                "title": "cs9r-a-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "7300431",
+              "post_image": {
+                "title": "cs9r-a-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "7300444",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs9r-a"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ],
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs9r-a"
+    },
+    {
+      "op": "mutate",
+      "as": "gap_u",
+      "actor": "writer",
+      "object_id": "cs9r-a",
+      "changes": {
+        "title": "x"
+      },
+      "expected_version": 7300425,
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "stale_u",
+      "actor": "writer",
+      "object_id": "cs9r-a",
+      "changes": {
+        "title": "x"
+      },
+      "expected_version": 7300430,
+      "type": "conformance.record"
+    },
+    {
+      "op": "add_relationship",
+      "as": "gap_ra",
+      "actor": "writer",
+      "object_id": "cs9r-a",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-new"
+      },
+      "expected_version": 7300422
+    },
+    {
+      "op": "get_history",
+      "as": "h_mid",
+      "object_id": "cs9r-a"
+    },
+    {
+      "op": "mutate",
+      "as": "current_u",
+      "actor": "writer",
+      "object_id": "cs9r-a",
+      "changes": {
+        "title": "cs9r-next"
+      },
+      "expected_version": "$h.semantic_view.object_version",
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "old_current_u",
+      "actor": "writer",
+      "object_id": "cs9r-a",
+      "changes": {
+        "title": "x"
+      },
+      "expected_version": "$h.semantic_view.object_version",
+      "type": "conformance.record"
+    },
+    {
+      "op": "get_history",
+      "as": "h2",
+      "object_id": "cs9r-a"
+    }
+  ],
+  "assert": [
+    {
+      "version_in_history": {
+        "version": 7300425,
+        "step": "h",
+        "expect": false
+      },
+      "label": "gap token was never issued"
+    },
+    {
+      "version_in_history": {
+        "version": 7300422,
+        "step": "h",
+        "expect": false
+      },
+      "label": "gap token was never issued"
+    },
+    {
+      "outcome_in": {
+        "step": "gap_u",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "stale_u",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "gap_ra",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "h",
+        "after": "h_mid"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "current_u",
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "CON-VERSION-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "old_current_u",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-ADVANCE-001"
+      ]
+    },
+    {
+      "history_unique_versions": "h2",
+      "requirements": [
+        "CON-UNIQUE-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs9r-a",
+        "history": "h2"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "C-VALID-002",
+  "title": "Semantic invalidity distinguishable from authorization denial",
+  "requirements": ["OP-OUTCOME-001", "TYPE-VALID-001", "AUTH-BASE-001"],
+  "steps": [
+    {"op": "create", "actor": "writer", "object_id": "wi-valid-002", "type": "conformance.work-item", "initial_state": {"title": "Good"}},
+    {"op": "mutate", "as": "auth_denied", "actor": "reader", "object_id": "wi-valid-002", "changes": {"title": "X"}},
+    {"op": "mutate", "as": "semantic_invalid", "actor": "writer", "object_id": "wi-valid-002", "changes": {"title": ""}}
+  ],
+  "assert": [
+    {"step": "auth_denied", "outcome": "AUTHORIZATION_DENIED"},
+    {"step": "semantic_invalid", "outcome": "SEMANTICALLY_INVALID"},
+    {"compare": "$auth_denied.outcome", "not_equals": "$semantic_invalid.outcome"}
+  ]
+}

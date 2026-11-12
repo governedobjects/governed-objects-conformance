@@ -1,0 +1,92 @@
+{
+  "id": "C-CON-001",
+  "title": "Stale conditional mutation yields conflict preserving first writer",
+  "requirements": [
+    "CON-CONFLICT-001",
+    "CON-NOADVANCE-001",
+    "OP-NOCHANGE-001"
+  ],
+  "requires_capabilities": {
+    "mutable_objects": true
+  },
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-con-001",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "A"
+      }
+    },
+    {
+      "op": "read",
+      "as": "v1",
+      "actor": "writer",
+      "object_id": "wi-con-001"
+    },
+    {
+      "op": "mutate",
+      "as": "a",
+      "actor": "writer",
+      "object_id": "wi-con-001",
+      "changes": {
+        "title": "B"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before_b",
+      "object_id": "wi-con-001"
+    },
+    {
+      "op": "mutate",
+      "as": "b",
+      "actor": "writer",
+      "object_id": "wi-con-001",
+      "changes": {
+        "title": "C"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-con-001"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-con-001"
+    }
+  ],
+  "assert": [
+    {
+      "step": "a",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "step": "b",
+      "outcome": "CONFLICT"
+    },
+    {
+      "semantic_view_field": "accepted_state.title",
+      "step": "b",
+      "equals": "B"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$a.semantic_view.object_version"
+    },
+    {
+      "relationship_set_equals": "a",
+      "step": "after"
+    },
+    {
+      "compare": "$history_after.canonical_history",
+      "equals": "$history_before_b.canonical_history"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "C-TYPE-001",
+  "title": "Type identity and Type Version are present in semantic view",
+  "requirements": [
+    "TYPE-ID-001",
+    "TYPE-VERSION-001"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-type-001",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Typed"
+      }
+    },
+    {
+      "op": "semantic_view",
+      "as": "view",
+      "object_id": "wi-type-001"
+    }
+  ],
+  "assert": [
+    {
+      "step": "created",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "semantic_view_field": "type_identity",
+      "step": "view",
+      "equals": "conformance.work-item"
+    },
+    {
+      "semantic_view_field": "type_version",
+      "step": "view",
+      "not_null": true
+    },
+    {
+      "compare": "$view.semantic_view.type_version",
+      "equals": "$created.semantic_view.type_version"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "id": "D22-OP-001",
+  "title": "Domain-invalid state update of a portable type is SEMANTICALLY_INVALID and changes nothing",
+  "cs": [],
+  "requirements": [
+    "OP-OUTCOME-001",
+    "TYPE-VALID-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "modality": "MUST",
+  "note": "Uses the runtime's own portable-type support (not a harness type adapter) so the outcome class is the runtime's.",
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "writer",
+      "object_id": "op-r",
+      "type": "conformance.record",
+      "initial_state": {
+        "title": "op-title",
+        "status": "draft"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "op-r"
+    },
+    {
+      "op": "mutate",
+      "as": "unknown_field",
+      "actor": "writer",
+      "object_id": "op-r",
+      "type": "conformance.record",
+      "changes": {
+        "bogus": "x"
+      }
+    },
+    {
+      "op": "mutate",
+      "as": "lifecycle_field",
+      "actor": "writer",
+      "object_id": "op-r",
+      "type": "conformance.record",
+      "changes": {
+        "status": "completed"
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "h2",
+      "object_id": "op-r"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_in": {
+        "step": "unknown_field",
+        "outcomes": [
+          "SEMANTICALLY_INVALID"
+        ]
+      },
+      "requirements": [
+        "OP-OUTCOME-001",
+        "TYPE-VALID-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "lifecycle_field",
+        "outcomes": [
+          "SEMANTICALLY_INVALID"
+        ]
+      },
+      "requirements": [
+        "OP-OUTCOME-001",
+        "TYPE-VALID-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "h",
+        "after": "h2"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ]
+    }
+  ]
+}

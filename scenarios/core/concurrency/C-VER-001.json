@@ -1,0 +1,14 @@
+{
+  "id": "C-VER-001",
+  "title": "Accepted mutation changes object version opaque token",
+  "requirements": ["CON-ADVANCE-001", "CON-VERSION-001"],
+  "requires_capabilities": {"mutable_objects": true},
+  "steps": [
+    {"op": "create", "as": "created", "actor": "writer", "object_id": "wi-ver-001", "type": "conformance.work-item", "initial_state": {"title": "V"}},
+    {"op": "mutate", "as": "mutated", "actor": "writer", "object_id": "wi-ver-001", "changes": {"title": "V2"}}
+  ],
+  "assert": [
+    {"step": "mutated", "outcome": "ACCEPTED"},
+    {"compare": "$mutated.semantic_view.object_version", "not_equals": "$created.semantic_view.object_version"}
+  ]
+}

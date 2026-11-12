@@ -1,0 +1,90 @@
+{
+  "id": "D22-CS1-003",
+  "title": "Same-value state update is accepted with a new Object Version",
+  "cs": [
+    "CS-1"
+  ],
+  "requirements": [
+    "CON-ADVANCE-001",
+    "CON-UNIQUE-001",
+    "CORE-HIST-001"
+  ],
+  "modality": "MUST",
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "writer",
+      "object_id": "cs1-s",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs1-same"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "same",
+      "actor": "writer",
+      "object_id": "cs1-s",
+      "changes": {
+        "title": "cs1-same"
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs1-s"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_in": {
+        "step": "same",
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "CON-ADVANCE-001"
+      ]
+    },
+    {
+      "distinct": [
+        "$c.semantic_view.object_version",
+        "$same.semantic_view.object_version"
+      ],
+      "requirements": [
+        "CON-ADVANCE-001",
+        "CON-UNIQUE-001"
+      ]
+    },
+    {
+      "history_equals": {
+        "step": "h",
+        "expected": [
+          {
+            "effect": "object_created"
+          },
+          {
+            "effect": "state_updated"
+          }
+        ]
+      },
+      "requirements": [
+        "CORE-HIST-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs1-s",
+        "history": "h"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    }
+  ]
+}

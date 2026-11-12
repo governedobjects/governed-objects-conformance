@@ -1,0 +1,122 @@
+{
+  "id": "C-REL-015",
+  "title": "Relationship mutation advances source Object Version only",
+  "requirements": [
+    "REL-OWNER-001",
+    "CON-ADVANCE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "spec_revision": "draft2.1",
+  "requires_capabilities": {
+    "relationship_add": true,
+    "relationship_remove": true
+  },
+  "skip_if_missing": [
+    "relationship_add",
+    "relationship_remove"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "source_created",
+      "actor": "writer",
+      "object_id": "wi-rel-015",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Owner"
+      }
+    },
+    {
+      "op": "create",
+      "as": "target_created",
+      "actor": "writer",
+      "object_id": "party-rel-015",
+      "type": "conformance.party",
+      "initial_state": {
+        "name": "Target"
+      }
+    },
+    {
+      "op": "read",
+      "as": "source_before",
+      "actor": "writer",
+      "object_id": "wi-rel-015"
+    },
+    {
+      "op": "read",
+      "as": "target_before",
+      "actor": "writer",
+      "object_id": "party-rel-015"
+    },
+    {
+      "op": "add_relationship",
+      "as": "added",
+      "actor": "writer",
+      "object_id": "wi-rel-015",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-015"
+      }
+    },
+    {
+      "op": "read",
+      "as": "source_after_add",
+      "actor": "writer",
+      "object_id": "wi-rel-015"
+    },
+    {
+      "op": "read",
+      "as": "target_after_add",
+      "actor": "writer",
+      "object_id": "party-rel-015"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "removed",
+      "actor": "writer",
+      "object_id": "wi-rel-015",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-015"
+      }
+    },
+    {
+      "op": "read",
+      "as": "source_after_remove",
+      "actor": "writer",
+      "object_id": "wi-rel-015"
+    },
+    {
+      "op": "read",
+      "as": "target_after_remove",
+      "actor": "writer",
+      "object_id": "party-rel-015"
+    }
+  ],
+  "assert": [
+    {
+      "step": "added",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "compare": "$source_after_add.semantic_view.object_version",
+      "not_equals": "$source_before.semantic_view.object_version"
+    },
+    {
+      "compare": "$target_after_add.semantic_view.object_version",
+      "equals": "$target_before.semantic_view.object_version"
+    },
+    {
+      "step": "removed",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "compare": "$source_after_remove.semantic_view.object_version",
+      "not_equals": "$source_after_add.semantic_view.object_version"
+    },
+    {
+      "compare": "$target_after_remove.semantic_view.object_version",
+      "equals": "$target_before.semantic_view.object_version"
+    }
+  ]
+}

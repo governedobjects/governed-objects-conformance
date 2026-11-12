@@ -1,0 +1,51 @@
+{
+  "id": "C-TYPE-002",
+  "title": "Bound Type Version remains stable across accepted mutation",
+  "requirements": [
+    "TYPE-VERSION-001",
+    "TYPE-BIND-001"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-type-002",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Bound"
+      }
+    },
+    {
+      "op": "mutate",
+      "as": "mutated",
+      "actor": "writer",
+      "object_id": "wi-type-002",
+      "changes": {
+        "title": "Still Bound"
+      }
+    }
+  ],
+  "assert": [
+    {
+      "step": "mutated",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "compare": "$created.semantic_view.type_version",
+      "not_null": true
+    },
+    {
+      "compare": "$mutated.semantic_view.type_version",
+      "not_null": true
+    },
+    {
+      "compare": "$mutated.semantic_view.type_version",
+      "equals": "$created.semantic_view.type_version"
+    },
+    {
+      "compare": "$mutated.semantic_view.object_version",
+      "not_equals": "$created.semantic_view.object_version"
+    }
+  ]
+}

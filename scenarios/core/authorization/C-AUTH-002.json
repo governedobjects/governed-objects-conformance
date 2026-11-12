@@ -1,0 +1,72 @@
+{
+  "id": "C-AUTH-002",
+  "title": "Reader mutation denied without canonical change",
+  "requirements": [
+    "AUTH-BASE-001",
+    "OP-NOCHANGE-001",
+    "OP-OUTCOME-001"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-auth-002",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Secret"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-auth-002"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-auth-002"
+    },
+    {
+      "op": "mutate",
+      "as": "denied",
+      "actor": "reader",
+      "object_id": "wi-auth-002",
+      "changes": {
+        "title": "Stolen"
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "history",
+      "object_id": "wi-auth-002"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-auth-002"
+    }
+  ],
+  "assert": [
+    {
+      "step": "denied",
+      "outcome": "AUTHORIZATION_DENIED"
+    },
+    {
+      "compare": "$denied.semantic_view.accepted_state",
+      "equals": "$before.semantic_view.accepted_state"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "denied"
+    },
+    {
+      "compare": "$denied.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "compare": "$history_after.canonical_history",
+      "equals": "$history_before.canonical_history"
+    }
+  ]
+}

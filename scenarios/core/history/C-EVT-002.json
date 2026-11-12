@@ -1,0 +1,92 @@
+{
+  "id": "C-EVT-002",
+  "title": "Denied invalid and conflict attempts excluded from canonical history",
+  "requirements": [
+    "EVT-ACCEPT-001",
+    "EVT-SEPARATE-001",
+    "EVT-CONTENT-001"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-evt-002",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Clean"
+      }
+    },
+    {
+      "op": "mutate",
+      "actor": "reader",
+      "object_id": "wi-evt-002",
+      "changes": {
+        "title": "Denied"
+      }
+    },
+    {
+      "op": "mutate",
+      "actor": "writer",
+      "object_id": "wi-evt-002",
+      "changes": {
+        "title": ""
+      }
+    },
+    {
+      "op": "read",
+      "as": "v1",
+      "actor": "writer",
+      "object_id": "wi-evt-002"
+    },
+    {
+      "op": "mutate",
+      "actor": "writer",
+      "object_id": "wi-evt-002",
+      "changes": {
+        "title": "OK"
+      }
+    },
+    {
+      "op": "mutate",
+      "actor": "writer",
+      "object_id": "wi-evt-002",
+      "changes": {
+        "title": "Conflict"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "get_history",
+      "as": "history",
+      "object_id": "wi-evt-002"
+    }
+  ],
+  "assert": [
+    {
+      "history_accepted_count": 2,
+      "step": "history"
+    },
+    {
+      "history_all_fields_not_null": [
+        "effect",
+        "canonical_identity",
+        "type_identity",
+        "type_version",
+        "object_version"
+      ],
+      "step": "history"
+    },
+    {
+      "history_contains": {
+        "effect": "object_created"
+      },
+      "step": "history"
+    },
+    {
+      "history_contains": {
+        "effect": "state_updated"
+      },
+      "step": "history"
+    }
+  ]
+}

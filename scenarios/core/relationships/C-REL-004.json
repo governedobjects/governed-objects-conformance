@@ -1,0 +1,70 @@
+{
+  "id": "C-REL-004",
+  "title": "Accepted relationship mutation reflected in canonical history",
+  "requirements": [
+    "CORE-HIST-001",
+    "OP-HIST-001",
+    "EVT-CONTENT-001"
+  ],
+  "requires_capabilities": {
+    "relationship_add": true
+  },
+  "skip_if_missing": [
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-rel-004",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Hist"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "added",
+      "actor": "writer",
+      "object_id": "wi-rel-004",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-1"
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "history",
+      "object_id": "wi-rel-004"
+    }
+  ],
+  "assert": [
+    {
+      "step": "added",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "history_accepted_count": 2,
+      "step": "history"
+    },
+    {
+      "history_contains": {
+        "effect": "relationship_added",
+        "object_version": "$added.semantic_view.object_version",
+        "relationship_type": "owned_by",
+        "relationship_target": "party-1"
+      },
+      "step": "history"
+    },
+    {
+      "history_all_fields_not_null": [
+        "effect",
+        "canonical_identity",
+        "type_identity",
+        "type_version",
+        "object_version"
+      ],
+      "step": "history"
+    }
+  ]
+}

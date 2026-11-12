@@ -1,0 +1,286 @@
+{
+  "id": "D22-CS8-001",
+  "title": "Restoration adds no accepted change",
+  "cs": [
+    "CS-8"
+  ],
+  "requirements": [
+    "PORT-RESTORE-001",
+    "PORT-PRESERVE-001",
+    "TYPE-BIND-001",
+    "CORE-HIST-001",
+    "CON-UNIQUE-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "declared restoration capability (restoration: true, restorable_types contains conformance.record)",
+    "claims": [
+      {
+        "capability": "restoration"
+      },
+      {
+        "capability": "restorable_types",
+        "contains": "conformance.record"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "restore",
+      "as": "r",
+      "actor": "restorer",
+      "objects": [
+        {
+          "canonical_identity": "cs8-a",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs8-a-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-cs8-a"
+            }
+          ],
+          "current_object_version": "7300444",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "7300421",
+              "post_image": {
+                "title": "cs8-a-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "7300430",
+              "post_image": {
+                "title": "cs8-a-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "7300431",
+              "post_image": {
+                "title": "cs8-a-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "7300444",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs8-a"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ],
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs8-a"
+    },
+    {
+      "op": "get_history",
+      "as": "h_again",
+      "object_id": "cs8-a"
+    },
+    {
+      "op": "mutate",
+      "as": "next",
+      "actor": "writer",
+      "object_id": "cs8-a",
+      "changes": {
+        "title": "cs8-after"
+      },
+      "expected_version": "$h.semantic_view.object_version",
+      "type": "conformance.record"
+    },
+    {
+      "op": "get_history",
+      "as": "h2",
+      "object_id": "cs8-a"
+    }
+  ],
+  "assert": [
+    {
+      "history_equals": {
+        "step": "h",
+        "keys": [
+          "effect",
+          "relationship_type",
+          "relationship_target"
+        ],
+        "expected": [
+          {
+            "effect": "object_created"
+          },
+          {
+            "effect": "state_updated"
+          },
+          {
+            "effect": "lifecycle_transition"
+          },
+          {
+            "effect": "relationship_added",
+            "relationship_type": "depends_on",
+            "relationship_target": "p-cs8-a"
+          }
+        ]
+      },
+      "requirements": [
+        "PORT-RESTORE-001",
+        "CORE-HIST-001"
+      ],
+      "label": "no entry added; count, order and effects preserved"
+    },
+    {
+      "history_actor_absent": {
+        "step": "h",
+        "actor": "restorer"
+      },
+      "requirements": [
+        "PORT-RESTORE-001"
+      ]
+    },
+    {
+      "observer_field": {
+        "step": "h",
+        "path": "accepted_state",
+        "equals": {
+          "title": "cs8-a-secret-b",
+          "status": "active"
+        }
+      },
+      "requirements": [
+        "PORT-PRESERVE-001"
+      ]
+    },
+    {
+      "relationships_equal": {
+        "step": "h",
+        "expected": [
+          {
+            "type": "depends_on",
+            "target": "p-cs8-a"
+          }
+        ]
+      },
+      "requirements": [
+        "PORT-PRESERVE-001"
+      ]
+    },
+    {
+      "observer_field": {
+        "step": "h",
+        "path": "type_version",
+        "equals": "1"
+      },
+      "requirements": [
+        "TYPE-BIND-001"
+      ]
+    },
+    {
+      "history_same_as": {
+        "step": "h",
+        "other": "h_again"
+      },
+      "requirements": [
+        "EVT-ORDER-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs8-a",
+        "history": "h"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ],
+      "label": "current revision is the last restored revision"
+    },
+    {
+      "outcome_in": {
+        "step": "next",
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "CON-VERSION-001"
+      ]
+    },
+    {
+      "history_equals": {
+        "step": "h2",
+        "expected": [
+          {
+            "effect": "object_created"
+          },
+          {
+            "effect": "state_updated"
+          },
+          {
+            "effect": "lifecycle_transition"
+          },
+          {
+            "effect": "relationship_added"
+          },
+          {
+            "effect": "state_updated"
+          }
+        ]
+      },
+      "requirements": [
+        "PORT-RESTORE-001"
+      ],
+      "label": "new mutation appends exactly one entry"
+    },
+    {
+      "history_unique_versions": "h2",
+      "requirements": [
+        "CON-UNIQUE-001"
+      ],
+      "label": "fresh token avoids restored tokens"
+    },
+    {
+      "lineage": {
+        "object_id": "cs8-a",
+        "history": "h2"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    },
+    {
+      "record": {
+        "label": "restored current token (informational; exact-token retention is a PRC matter)",
+        "source": "7300444",
+        "restored": "$h.semantic_view.object_version"
+      }
+    }
+  ]
+}

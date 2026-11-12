@@ -1,0 +1,14 @@
+{
+  "id": "C-LIFE-002",
+  "title": "active to completed transition accepted",
+  "requirements": ["OP-ACCEPT-001", "TYPE-VALID-001"],
+  "steps": [
+    {"op": "create", "actor": "writer", "object_id": "wi-life-002", "type": "conformance.work-item", "initial_state": {"title": "Task"}},
+    {"op": "transition", "actor": "writer", "object_id": "wi-life-002", "to": "active"},
+    {"op": "transition", "as": "done", "actor": "writer", "object_id": "wi-life-002", "to": "completed"}
+  ],
+  "assert": [
+    {"step": "done", "outcome": "ACCEPTED"},
+    {"semantic_view_field": "accepted_state.status", "step": "done", "equals": "completed"}
+  ]
+}

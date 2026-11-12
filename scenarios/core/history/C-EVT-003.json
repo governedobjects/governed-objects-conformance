@@ -1,0 +1,15 @@
+{
+  "id": "C-EVT-003",
+  "title": "Canonical history order stable across repeated reads",
+  "requirements": ["EVT-ORDER-001", "EVT-CONTENT-001"],
+  "steps": [
+    {"op": "create", "actor": "writer", "object_id": "wi-evt-003", "type": "conformance.work-item", "initial_state": {"title": "O1"}},
+    {"op": "mutate", "actor": "writer", "object_id": "wi-evt-003", "changes": {"title": "O2"}},
+    {"op": "transition", "actor": "writer", "object_id": "wi-evt-003", "to": "active"},
+    {"op": "get_history", "as": "h1", "object_id": "wi-evt-003"},
+    {"op": "get_history", "as": "h2", "object_id": "wi-evt-003"}
+  ],
+  "assert": [
+    {"compare": "$h1.canonical_history", "equals": "$h2.canonical_history"}
+  ]
+}

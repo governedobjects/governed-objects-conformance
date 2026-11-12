@@ -1,0 +1,27 @@
+{
+  "id": "C-TYPE-003",
+  "title": "Unsupported bound Type Version is explicitly refused when capability is exposed",
+  "requirements": [
+    "TYPE-SUPPORT-001"
+  ],
+  "requires_capabilities": {
+    "unsupported_type_version_refusal": true
+  },
+  "skip_if_missing": [
+    "unsupported_type_version_refusal"
+  ],
+  "steps": [
+    {
+      "op": "replay_unsupported_type_version",
+      "as": "unsupported",
+      "object_id": "wi-type-unsupported",
+      "type": "conformance.work-item"
+    }
+  ],
+  "assert": [
+    {
+      "step": "unsupported",
+      "outcome": "SEMANTICALLY_INVALID"
+    }
+  ]
+}

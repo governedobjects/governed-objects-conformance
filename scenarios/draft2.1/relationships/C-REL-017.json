@@ -1,0 +1,76 @@
+{
+  "id": "C-REL-017",
+  "title": "Relationship collection equality is order-insensitive",
+  "requirements": [
+    "REL-ORDER-001",
+    "REL-EQUAL-001",
+    "REL-MULT-001"
+  ],
+  "spec_revision": "draft2.1",
+  "requires_capabilities": {
+    "relationship_add": true
+  },
+  "skip_if_missing": [
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-rel-017",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Order"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "add_a",
+      "actor": "writer",
+      "object_id": "wi-rel-017",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-rel-017a"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "add_b",
+      "actor": "writer",
+      "object_id": "wi-rel-017",
+      "relationship": {
+        "type": "depends_on",
+        "target": "wi-rel-017b"
+      }
+    },
+    {
+      "op": "semantic_view",
+      "as": "view_one",
+      "object_id": "wi-rel-017"
+    },
+    {
+      "op": "semantic_view",
+      "as": "view_two",
+      "object_id": "wi-rel-017"
+    }
+  ],
+  "assert": [
+    {
+      "step": "add_a",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "step": "add_b",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_collection_unique": true,
+      "step": "view_one"
+    },
+    {
+      "relationship_set_equals": "view_one",
+      "step": "view_two"
+    }
+  ]
+}

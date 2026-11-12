@@ -1,0 +1,101 @@
+{
+  "id": "C-REL-006",
+  "title": "Unauthorized relationship removal has no canonical effect",
+  "requirements": [
+    "REL-REMOVE-001",
+    "AUTH-BASE-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "requires_capabilities": {
+    "relationship_add": true,
+    "relationship_remove": true
+  },
+  "skip_if_missing": [
+    "relationship_add",
+    "relationship_remove"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-rel-006",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "RelAuth"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "added",
+      "actor": "writer",
+      "object_id": "wi-rel-006",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-1"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-rel-006"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-rel-006"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "denied",
+      "actor": "reader",
+      "object_id": "wi-rel-006",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-1"
+      }
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-rel-006"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-rel-006"
+    }
+  ],
+  "assert": [
+    {
+      "step": "added",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_exists": {
+        "type": "owned_by",
+        "target": "party-1"
+      },
+      "step": "before"
+    },
+    {
+      "step": "denied",
+      "outcome": "AUTHORIZATION_DENIED"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "after"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "compare": "$history_after.canonical_history",
+      "equals": "$history_before.canonical_history"
+    }
+  ]
+}

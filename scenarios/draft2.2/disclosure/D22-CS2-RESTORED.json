@@ -1,0 +1,723 @@
+{
+  "id": "D22-CS2-RESTORED",
+  "title": "Outsider mutations of every family on restored objects with sparse tokens disclose nothing and do not vary",
+  "cs": [
+    "CS-2"
+  ],
+  "requirements": [
+    "AUTH-DISCLOSE-001",
+    "REL-PRECEDENCE-001",
+    "OP-NOCHANGE-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "declared restoration capability (restoration: true, restorable_types contains conformance.record)",
+    "claims": [
+      {
+        "capability": "restoration"
+      },
+      {
+        "capability": "restorable_types",
+        "contains": "conformance.record"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "restore",
+      "as": "rest_p",
+      "actor": "restorer",
+      "objects": [
+        {
+          "canonical_identity": "cs2r-p",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs2r-p-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-cs2r-p"
+            }
+          ],
+          "current_object_version": "7300444",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "7300421",
+              "post_image": {
+                "title": "cs2r-p-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "7300430",
+              "post_image": {
+                "title": "cs2r-p-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "7300431",
+              "post_image": {
+                "title": "cs2r-p-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "7300444",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs2r-p"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ],
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "restore",
+      "as": "rest_q",
+      "actor": "restorer",
+      "objects": [
+        {
+          "canonical_identity": "cs2r-q",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs2r-q-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-cs2r-q"
+            }
+          ],
+          "current_object_version": "5100031",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "5100007",
+              "post_image": {
+                "title": "cs2r-q-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "5100019",
+              "post_image": {
+                "title": "cs2r-q-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "5100023",
+              "post_image": {
+                "title": "cs2r-q-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "5100031",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs2r-q"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ],
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_p",
+      "object_id": "cs2r-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_q",
+      "object_id": "cs2r-q"
+    },
+    {
+      "op": "mutate",
+      "as": "p_update_none",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "changes": {
+        "title": "cs2r-attempt"
+      },
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "p_update_current",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "changes": {
+        "title": "cs2r-attempt"
+      },
+      "expected_version": 7300444,
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "p_update_stale",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "changes": {
+        "title": "cs2r-attempt"
+      },
+      "expected_version": 7300430,
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "p_update_never",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "changes": {
+        "title": "cs2r-attempt"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001",
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "p_transition_none",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "to": "completed",
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "p_transition_current",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "to": "completed",
+      "expected_version": 7300444,
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "p_transition_stale",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "to": "completed",
+      "expected_version": 7300430,
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "p_transition_never",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "to": "completed",
+      "expected_version": "$caps.never_issued_version_token:900000001",
+      "type": "conformance.record"
+    },
+    {
+      "op": "add_relationship",
+      "as": "p_rel_add_none",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-p"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "p_rel_add_current",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-p"
+      },
+      "expected_version": 7300444
+    },
+    {
+      "op": "add_relationship",
+      "as": "p_rel_add_stale",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-p"
+      },
+      "expected_version": 7300430
+    },
+    {
+      "op": "add_relationship",
+      "as": "p_rel_add_never",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-p"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "p_rel_remove_none",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-p"
+      }
+    },
+    {
+      "op": "remove_relationship",
+      "as": "p_rel_remove_current",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-p"
+      },
+      "expected_version": 7300444
+    },
+    {
+      "op": "remove_relationship",
+      "as": "p_rel_remove_stale",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-p"
+      },
+      "expected_version": 7300430
+    },
+    {
+      "op": "remove_relationship",
+      "as": "p_rel_remove_never",
+      "actor": "outsider",
+      "object_id": "cs2r-p",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-p"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "mutate",
+      "as": "q_update_none",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "changes": {
+        "title": "cs2r-attempt"
+      },
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "q_update_current",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "changes": {
+        "title": "cs2r-attempt"
+      },
+      "expected_version": 5100031,
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "q_update_stale",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "changes": {
+        "title": "cs2r-attempt"
+      },
+      "expected_version": 5100019,
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "q_update_never",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "changes": {
+        "title": "cs2r-attempt"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001",
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "q_transition_none",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "to": "completed",
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "q_transition_current",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "to": "completed",
+      "expected_version": 5100031,
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "q_transition_stale",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "to": "completed",
+      "expected_version": 5100019,
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "q_transition_never",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "to": "completed",
+      "expected_version": "$caps.never_issued_version_token:900000001",
+      "type": "conformance.record"
+    },
+    {
+      "op": "add_relationship",
+      "as": "q_rel_add_none",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-q"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "q_rel_add_current",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-q"
+      },
+      "expected_version": 5100031
+    },
+    {
+      "op": "add_relationship",
+      "as": "q_rel_add_stale",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-q"
+      },
+      "expected_version": 5100019
+    },
+    {
+      "op": "add_relationship",
+      "as": "q_rel_add_never",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-q"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "q_rel_remove_none",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-q"
+      }
+    },
+    {
+      "op": "remove_relationship",
+      "as": "q_rel_remove_current",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-q"
+      },
+      "expected_version": 5100031
+    },
+    {
+      "op": "remove_relationship",
+      "as": "q_rel_remove_stale",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-q"
+      },
+      "expected_version": 5100019
+    },
+    {
+      "op": "remove_relationship",
+      "as": "q_rel_remove_never",
+      "actor": "outsider",
+      "object_id": "cs2r-q",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs2r-q"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_p",
+      "object_id": "cs2r-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_q",
+      "object_id": "cs2r-q"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_not": {
+        "steps": [
+          "p_update_none",
+          "p_update_current",
+          "p_update_stale",
+          "p_update_never",
+          "p_transition_none",
+          "p_transition_current",
+          "p_transition_stale",
+          "p_transition_never",
+          "p_rel_add_none",
+          "p_rel_add_current",
+          "p_rel_add_stale",
+          "p_rel_add_never",
+          "p_rel_remove_none",
+          "p_rel_remove_current",
+          "p_rel_remove_stale",
+          "p_rel_remove_never",
+          "q_update_none",
+          "q_update_current",
+          "q_update_stale",
+          "q_update_never",
+          "q_transition_none",
+          "q_transition_current",
+          "q_transition_stale",
+          "q_transition_never",
+          "q_rel_add_none",
+          "q_rel_add_current",
+          "q_rel_add_stale",
+          "q_rel_add_never",
+          "q_rel_remove_none",
+          "q_rel_remove_current",
+          "q_rel_remove_stale",
+          "q_rel_remove_never"
+        ],
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "p_update_none",
+          "p_update_current",
+          "p_update_stale",
+          "p_update_never",
+          "p_transition_none",
+          "p_transition_current",
+          "p_transition_stale",
+          "p_transition_never",
+          "p_rel_add_none",
+          "p_rel_add_current",
+          "p_rel_add_stale",
+          "p_rel_add_never",
+          "p_rel_remove_none",
+          "p_rel_remove_current",
+          "p_rel_remove_stale",
+          "p_rel_remove_never"
+        ],
+        "protected_from": "obs_p",
+        "protected_literals": [
+          "cs2r-p-secret-a",
+          "draft"
+        ]
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 1 (P)"
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "q_update_none",
+          "q_update_current",
+          "q_update_stale",
+          "q_update_never",
+          "q_transition_none",
+          "q_transition_current",
+          "q_transition_stale",
+          "q_transition_never",
+          "q_rel_add_none",
+          "q_rel_add_current",
+          "q_rel_add_stale",
+          "q_rel_add_never",
+          "q_rel_remove_none",
+          "q_rel_remove_current",
+          "q_rel_remove_stale",
+          "q_rel_remove_never"
+        ],
+        "protected_from": "obs_q",
+        "protected_literals": [
+          "cs2r-q-secret-a",
+          "draft"
+        ]
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 1 (Q)"
+    },
+    {
+      "invariant": {
+        "steps": [
+          "p_update_none",
+          "p_update_current",
+          "p_update_stale",
+          "p_update_never",
+          "q_update_none",
+          "q_update_current",
+          "q_update_stale",
+          "q_update_never"
+        ],
+        "content": true
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 2 invariance (update)"
+    },
+    {
+      "invariant": {
+        "steps": [
+          "p_transition_none",
+          "p_transition_current",
+          "p_transition_stale",
+          "p_transition_never",
+          "q_transition_none",
+          "q_transition_current",
+          "q_transition_stale",
+          "q_transition_never"
+        ],
+        "content": true
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 2 invariance (transition)"
+    },
+    {
+      "invariant": {
+        "steps": [
+          "p_rel_add_none",
+          "p_rel_add_current",
+          "p_rel_add_stale",
+          "p_rel_add_never",
+          "q_rel_add_none",
+          "q_rel_add_current",
+          "q_rel_add_stale",
+          "q_rel_add_never"
+        ],
+        "content": true
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 2 invariance (rel_add)"
+    },
+    {
+      "invariant": {
+        "steps": [
+          "p_rel_remove_none",
+          "p_rel_remove_current",
+          "p_rel_remove_stale",
+          "p_rel_remove_never",
+          "q_rel_remove_none",
+          "q_rel_remove_current",
+          "q_rel_remove_stale",
+          "q_rel_remove_never"
+        ],
+        "content": true
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 2 invariance (rel_remove)"
+    },
+    {
+      "observer_unchanged": {
+        "before": "obs_p",
+        "after": "after_p"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "obs_q",
+        "after": "after_q"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    }
+  ]
+}

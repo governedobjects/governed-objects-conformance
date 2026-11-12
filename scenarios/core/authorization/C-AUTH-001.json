@@ -1,0 +1,10 @@
+{
+  "id": "C-AUTH-001",
+  "title": "Writer mutation accepted",
+  "requirements": ["AUTH-BASE-001", "OP-ACCEPT-001", "OP-CTX-001"],
+  "steps": [
+    {"op": "create", "actor": "writer", "object_id": "wi-auth-001", "type": "conformance.work-item", "initial_state": {"title": "Allowed"}},
+    {"op": "mutate", "as": "mutated", "actor": "writer", "object_id": "wi-auth-001", "changes": {"title": "Allowed2"}}
+  ],
+  "assert": [{"step": "mutated", "outcome": "ACCEPTED"}]
+}

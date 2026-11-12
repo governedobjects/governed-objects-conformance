@@ -1,0 +1,112 @@
+{
+  "id": "D22-CS5-001",
+  "title": "Creation with relationships: baseline content, no synthesized additions, replay reproduces them",
+  "cs": [
+    "CS-5"
+  ],
+  "requirements": [
+    "EVT-BASELINE-001",
+    "REL-REPLAY-001",
+    "EVT-REPLAY-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "creation with relationships exposed (create_with_relationships) and replay claimed for conformance.work-item",
+    "claims": [
+      {
+        "capability": "create_with_relationships"
+      },
+      {
+        "capability": "replay_types",
+        "contains": "conformance.work-item"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "writer",
+      "object_id": "cs5-a",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs5"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ],
+      "relationships": [
+        {
+          "type": "owned_by",
+          "target": "party-cs5"
+        }
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs5-a"
+    },
+    {
+      "op": "replay",
+      "as": "replayed",
+      "object_id": "cs5-a"
+    }
+  ],
+  "assert": [
+    {
+      "relationships_equal": {
+        "step": "h",
+        "expected": [
+          {
+            "type": "owned_by",
+            "target": "party-cs5"
+          }
+        ]
+      },
+      "requirements": [
+        "EVT-BASELINE-001"
+      ]
+    },
+    {
+      "history_equals": {
+        "step": "h",
+        "expected": [
+          {
+            "effect": "object_created"
+          }
+        ]
+      },
+      "requirements": [
+        "REL-REPLAY-001"
+      ],
+      "label": "no synthesized relationship addition"
+    },
+    {
+      "outcome_in": {
+        "step": "replayed",
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "EVT-REPLAY-001"
+      ]
+    },
+    {
+      "views_equal": {
+        "step": "replayed",
+        "other": "h",
+        "fields": [
+          "relationships",
+          "accepted_state",
+          "object_version"
+        ]
+      },
+      "requirements": [
+        "REL-REPLAY-001",
+        "EVT-BASELINE-001"
+      ]
+    }
+  ]
+}

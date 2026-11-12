@@ -1,0 +1,13 @@
+{
+  "id": "C-STATE-001",
+  "title": "Accepted mutation changes accepted canonical state",
+  "requirements": ["CORE-STATE-001", "CORE-STATE-002", "OP-ACCEPT-001"],
+  "steps": [
+    {"op": "create", "as": "created", "actor": "writer", "object_id": "wi-state-001", "type": "conformance.work-item", "initial_state": {"title": "Before"}},
+    {"op": "mutate", "as": "mutated", "actor": "writer", "object_id": "wi-state-001", "changes": {"title": "After"}}
+  ],
+  "assert": [
+    {"step": "mutated", "outcome": "ACCEPTED"},
+    {"semantic_view_field": "accepted_state.title", "step": "mutated", "equals": "After"}
+  ]
+}

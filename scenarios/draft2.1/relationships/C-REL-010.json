@@ -1,0 +1,109 @@
+{
+  "id": "C-REL-010",
+  "title": "Absent-edge relationship removal is an accepted canonical no-op",
+  "requirements": [
+    "REL-ABSENT-001",
+    "REL-NOOP-001",
+    "CON-NOADVANCE-001",
+    "OP-HIST-001"
+  ],
+  "spec_revision": "draft2.1",
+  "requires_capabilities": {
+    "relationship_remove": true
+  },
+  "skip_if_missing": [
+    "relationship_remove"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "source",
+      "actor": "writer",
+      "object_id": "wi-rel-010",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "AbsentRemove"
+      }
+    },
+    {
+      "op": "create",
+      "as": "target",
+      "actor": "writer",
+      "object_id": "party-rel-010",
+      "type": "conformance.party",
+      "initial_state": {
+        "name": "Target"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-rel-010"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-rel-010"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "absent_remove",
+      "actor": "writer",
+      "object_id": "wi-rel-010",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-010"
+      },
+      "expected_version": "$before.semantic_view.object_version"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-rel-010"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-rel-010"
+    }
+  ],
+  "assert": [
+    {
+      "relationship_absent": {
+        "type": "belongs_to",
+        "target": "party-rel-010"
+      },
+      "step": "before"
+    },
+    {
+      "step": "absent_remove",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "after"
+    },
+    {
+      "relationship_set_empty": true,
+      "step": "after"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "history_unchanged": "history_before",
+      "step": "history_after"
+    },
+    {
+      "history_excludes": {
+        "effect": "relationship_removed",
+        "relationship_type": "belongs_to",
+        "relationship_target": "party-rel-010"
+      },
+      "step": "history_after"
+    }
+  ]
+}

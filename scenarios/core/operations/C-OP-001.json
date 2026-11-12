@@ -1,0 +1,9 @@
+{
+  "id": "C-OP-001",
+  "title": "Authorized valid mutation yields ACCEPTED outcome",
+  "requirements": ["OP-OUTCOME-001", "OP-ACCEPT-001"],
+  "steps": [
+    {"op": "create", "as": "created", "actor": "writer", "object_id": "wi-op-001", "type": "conformance.work-item", "initial_state": {"title": "OK"}}
+  ],
+  "assert": [{"step": "created", "outcome": "ACCEPTED"}]
+}

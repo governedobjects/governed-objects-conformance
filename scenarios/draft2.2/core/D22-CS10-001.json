@@ -1,0 +1,218 @@
+{
+  "id": "D22-CS10-001",
+  "title": "Version-space exhaustion refusal: every family refused with no canonical change",
+  "cs": [
+    "CS-10"
+  ],
+  "requirements": [
+    "OP-OUTCOME-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "implementation-declared refusal condition that can be provoked (declared_refusals contains OBJECT_VERSION_SPACE_EXHAUSTED) and declared restoration capability to reach it",
+    "claims": [
+      {
+        "capability": "restoration"
+      },
+      {
+        "capability": "restorable_types",
+        "contains": "conformance.record"
+      },
+      {
+        "capability": "declared_refusals",
+        "contains": "OBJECT_VERSION_SPACE_EXHAUSTED"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "restore",
+      "as": "r",
+      "actor": "restorer",
+      "objects": [
+        {
+          "canonical_identity": "cs10-a",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs10-a-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-cs10-a"
+            }
+          ],
+          "current_object_version": "$caps.object_version_ceiling",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "1",
+              "post_image": {
+                "title": "cs10-a-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "2",
+              "post_image": {
+                "title": "cs10-a-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "3",
+              "post_image": {
+                "title": "cs10-a-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "$caps.object_version_ceiling",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs10-a"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ],
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs10-a"
+    },
+    {
+      "op": "mutate",
+      "as": "u",
+      "actor": "writer",
+      "object_id": "cs10-a",
+      "changes": {
+        "title": "cs10-x"
+      },
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "t",
+      "actor": "writer",
+      "object_id": "cs10-a",
+      "to": "completed",
+      "type": "conformance.record"
+    },
+    {
+      "op": "add_relationship",
+      "as": "ra",
+      "actor": "writer",
+      "object_id": "cs10-a",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-new"
+      }
+    },
+    {
+      "op": "remove_relationship",
+      "as": "rr",
+      "actor": "writer",
+      "object_id": "cs10-a",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs10-a"
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "h2",
+      "object_id": "cs10-a"
+    }
+  ],
+  "assert": [
+    {
+      "observer_field": {
+        "step": "h",
+        "path": "object_version",
+        "equals": "$caps.object_version_ceiling",
+        "as_token": true
+      },
+      "label": "object is at the declared ceiling",
+      "requirements": []
+    },
+    {
+      "outcome_in": {
+        "step": "u",
+        "outcomes": [
+          "REFUSED"
+        ]
+      },
+      "requirements": [
+        "OP-OUTCOME-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "t",
+        "outcomes": [
+          "REFUSED"
+        ]
+      },
+      "requirements": [
+        "OP-OUTCOME-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "ra",
+        "outcomes": [
+          "REFUSED"
+        ]
+      },
+      "requirements": [
+        "OP-OUTCOME-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "rr",
+        "outcomes": [
+          "REFUSED"
+        ]
+      },
+      "requirements": [
+        "OP-OUTCOME-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "h",
+        "after": "h2"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ]
+    }
+  ]
+}

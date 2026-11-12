@@ -1,0 +1,116 @@
+{
+  "id": "C-REPLAY-001",
+  "title": "Replay reconstructs accepted semantics after full evolution",
+  "requirements": [
+    "EVT-REPLAY-001",
+    "EVT-BASELINE-001"
+  ],
+  "requires_capabilities": {
+    "replay": true
+  },
+  "skip_if_missing": [
+    "replay"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-replay-001",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Start"
+      }
+    },
+    {
+      "op": "transition",
+      "actor": "writer",
+      "object_id": "wi-replay-001",
+      "to": "active"
+    },
+    {
+      "op": "mutate",
+      "actor": "writer",
+      "object_id": "wi-replay-001",
+      "changes": {
+        "title": "Mid"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "actor": "writer",
+      "object_id": "wi-replay-001",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-1"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "actor": "writer",
+      "object_id": "wi-replay-001",
+      "relationship": {
+        "type": "depends_on",
+        "target": "wi-dep"
+      }
+    },
+    {
+      "op": "remove_relationship",
+      "actor": "writer",
+      "object_id": "wi-replay-001",
+      "relationship": {
+        "type": "depends_on",
+        "target": "wi-dep"
+      }
+    },
+    {
+      "op": "transition",
+      "actor": "writer",
+      "object_id": "wi-replay-001",
+      "to": "completed"
+    },
+    {
+      "op": "semantic_view",
+      "as": "live",
+      "object_id": "wi-replay-001"
+    },
+    {
+      "op": "replay",
+      "as": "replayed",
+      "object_id": "wi-replay-001"
+    }
+  ],
+  "assert": [
+    {
+      "step": "replayed",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "compare": "$live.semantic_view.type_version",
+      "not_null": true
+    },
+    {
+      "compare": "$replayed.semantic_view.type_version",
+      "not_null": true
+    },
+    {
+      "compare": "$replayed.semantic_view.canonical_identity",
+      "equals": "$live.semantic_view.canonical_identity"
+    },
+    {
+      "compare": "$replayed.semantic_view.type_identity",
+      "equals": "$live.semantic_view.type_identity"
+    },
+    {
+      "compare": "$replayed.semantic_view.type_version",
+      "equals": "$live.semantic_view.type_version"
+    },
+    {
+      "compare": "$replayed.semantic_view.accepted_state",
+      "equals": "$live.semantic_view.accepted_state"
+    },
+    {
+      "relationship_set_equals": "live",
+      "step": "replayed"
+    }
+  ]
+}

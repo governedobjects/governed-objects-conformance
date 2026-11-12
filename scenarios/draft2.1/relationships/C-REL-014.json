@@ -1,0 +1,121 @@
+{
+  "id": "C-REL-014",
+  "title": "Stale absent-edge removal conflicts without canonical effect",
+  "requirements": [
+    "REL-PRECOND-001",
+    "REL-PRECEDENCE-001",
+    "CON-CONFLICT-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "spec_revision": "draft2.1",
+  "requires_capabilities": {
+    "relationship_remove": true
+  },
+  "skip_if_missing": [
+    "relationship_remove"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-rel-014",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "StaleAbsent"
+      }
+    },
+    {
+      "op": "create",
+      "as": "target",
+      "actor": "writer",
+      "object_id": "party-rel-014",
+      "type": "conformance.party",
+      "initial_state": {
+        "name": "Target"
+      }
+    },
+    {
+      "op": "read",
+      "as": "v1",
+      "actor": "writer",
+      "object_id": "wi-rel-014"
+    },
+    {
+      "op": "mutate",
+      "as": "mutated",
+      "actor": "writer",
+      "object_id": "wi-rel-014",
+      "changes": {
+        "title": "Advanced"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-rel-014"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-rel-014"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "stale_remove",
+      "actor": "writer",
+      "object_id": "wi-rel-014",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-014"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-rel-014"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-rel-014"
+    }
+  ],
+  "assert": [
+    {
+      "step": "mutated",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_absent": {
+        "type": "belongs_to",
+        "target": "party-rel-014"
+      },
+      "step": "before"
+    },
+    {
+      "compare": "$before.semantic_view.object_version",
+      "not_equals": "$v1.semantic_view.object_version"
+    },
+    {
+      "step": "stale_remove",
+      "outcome": "CONFLICT"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "after"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "history_unchanged": "history_before",
+      "step": "history_after"
+    }
+  ]
+}

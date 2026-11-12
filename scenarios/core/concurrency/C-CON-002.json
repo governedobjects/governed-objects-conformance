@@ -1,0 +1,100 @@
+{
+  "id": "C-CON-002",
+  "title": "Stale relationship add yields conflict",
+  "requirements": [
+    "CON-CONFLICT-001",
+    "CON-NOADVANCE-001",
+    "OP-NOCHANGE-001",
+    "REL-ACCEPT-001"
+  ],
+  "requires_capabilities": {
+    "relationship_add": true,
+    "mutable_objects": true
+  },
+  "skip_if_missing": [
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-con-002",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Rel"
+      }
+    },
+    {
+      "op": "read",
+      "as": "v1",
+      "actor": "writer",
+      "object_id": "wi-con-002"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-con-002"
+    },
+    {
+      "op": "mutate",
+      "as": "state_change",
+      "actor": "writer",
+      "object_id": "wi-con-002",
+      "changes": {
+        "title": "Rel2"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "add_relationship",
+      "as": "stale_rel",
+      "actor": "writer",
+      "object_id": "wi-con-002",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-1"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-con-002"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-con-002"
+    }
+  ],
+  "assert": [
+    {
+      "step": "state_change",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "step": "stale_rel",
+      "outcome": "CONFLICT"
+    },
+    {
+      "relationship_absent": {
+        "type": "owned_by",
+        "target": "party-1"
+      },
+      "step": "after"
+    },
+    {
+      "compare": "$stale_rel.semantic_view.object_version",
+      "equals": "$state_change.semantic_view.object_version"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$state_change.semantic_view.object_version"
+    },
+    {
+      "history_accepted_count": 2,
+      "step": "history_after"
+    }
+  ]
+}

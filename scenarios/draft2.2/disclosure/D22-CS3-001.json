@@ -1,0 +1,134 @@
+{
+  "id": "D22-CS3-001",
+  "title": "State-dependent validity of a transition does not vary the outcome or content for an outsider",
+  "cs": [
+    "CS-3"
+  ],
+  "requirements": [
+    "AUTH-DISCLOSE-001",
+    "OP-NOCHANGE-001"
+  ],
+  "modality": "MUST",
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "writer",
+      "object_id": "cs3-a",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs3-secret"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "semantic_view",
+      "as": "o",
+      "object_id": "cs3-a"
+    },
+    {
+      "op": "transition",
+      "as": "valid",
+      "actor": "outsider",
+      "object_id": "cs3-a",
+      "to": "active"
+    },
+    {
+      "op": "transition",
+      "as": "invalid",
+      "actor": "outsider",
+      "object_id": "cs3-a",
+      "to": "completed"
+    },
+    {
+      "op": "transition",
+      "as": "never_valid",
+      "actor": "outsider",
+      "object_id": "cs3-a",
+      "to": "draft"
+    },
+    {
+      "op": "transition",
+      "as": "valid_current",
+      "actor": "outsider",
+      "object_id": "cs3-a",
+      "to": "active",
+      "expected_version": "$o.semantic_view.object_version"
+    },
+    {
+      "op": "transition",
+      "as": "invalid_current",
+      "actor": "outsider",
+      "object_id": "cs3-a",
+      "to": "completed",
+      "expected_version": "$o.semantic_view.object_version"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after",
+      "object_id": "cs3-a"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_not": {
+        "steps": [
+          "valid",
+          "invalid",
+          "never_valid",
+          "valid_current",
+          "invalid_current"
+        ],
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "invariant": {
+        "steps": [
+          "valid",
+          "invalid",
+          "never_valid",
+          "valid_current",
+          "invalid_current"
+        ],
+        "content": true
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 2 invariance"
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "valid",
+          "invalid",
+          "never_valid",
+          "valid_current",
+          "invalid_current"
+        ],
+        "protected_from": "o"
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 1"
+    },
+    {
+      "observer_unchanged": {
+        "before": "o",
+        "after": "after"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    }
+  ]
+}

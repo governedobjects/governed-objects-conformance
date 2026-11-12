@@ -1,0 +1,60 @@
+{
+  "id": "C-PORT-001",
+  "title": "Semantic view exposes draft2 portability inventory",
+  "requirements": [
+    "TYPE-ID-001",
+    "TYPE-EXT-001",
+    "CORE-STATE-001"
+  ],
+  "requires_capabilities": {
+    "semantic_portability_view": true
+  },
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-port-001",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Portable"
+      }
+    },
+    {
+      "op": "semantic_view",
+      "as": "view",
+      "object_id": "wi-port-001"
+    }
+  ],
+  "assert": [
+    {
+      "semantic_view_field": "canonical_identity",
+      "step": "view",
+      "not_null": true
+    },
+    {
+      "semantic_view_field": "type_identity",
+      "step": "view",
+      "not_null": true
+    },
+    {
+      "semantic_view_field": "object_version",
+      "step": "view",
+      "not_null": true
+    },
+    {
+      "semantic_view_field": "accepted_state",
+      "step": "view",
+      "not_null": true
+    },
+    {
+      "semantic_view_field": "type_version",
+      "step": "view",
+      "not_null": true
+    },
+    {
+      "semantic_view_field": "relationships",
+      "step": "view",
+      "not_null": true
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "id": "D22-CS2R-001",
+  "title": "Read by a requester without read authority is denied and discloses nothing",
+  "cs": [
+    "CS-2R"
+  ],
+  "requirements": [
+    "AUTH-DISCLOSE-001",
+    "AUTH-QUERY-001"
+  ],
+  "modality": "MUST",
+  "steps": [
+    {
+      "op": "create",
+      "as": "cp",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs2-secret-p"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "p_m",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "changes": {
+        "title": "cs2-secret-p2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "transition",
+      "as": "p_t",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "to": "active",
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "add_relationship",
+      "as": "p_r",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "relationship": {
+        "type": "owned_by",
+        "target": "cs2-party-p"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "create",
+      "as": "cq",
+      "actor": "writer",
+      "object_id": "cs2-q",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs2-secret-q"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "q_m",
+      "actor": "writer",
+      "object_id": "cs2-q",
+      "changes": {
+        "title": "cs2-secret-q2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_p",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_q",
+      "object_id": "cs2-q"
+    },
+    {
+      "op": "read",
+      "as": "o_read_p",
+      "actor": "outsider",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "read",
+      "as": "o_read_q",
+      "actor": "outsider",
+      "object_id": "cs2-q"
+    },
+    {
+      "op": "read",
+      "as": "w_read_p",
+      "actor": "writer-no-read",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "read",
+      "as": "w_read_q",
+      "actor": "writer-no-read",
+      "object_id": "cs2-q"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_p",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_q",
+      "object_id": "cs2-q"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_not": {
+        "steps": [
+          "o_read_p",
+          "o_read_q",
+          "w_read_p",
+          "w_read_q"
+        ],
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "AUTH-QUERY-001"
+      ]
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "o_read_p",
+          "w_read_p"
+        ],
+        "protected_from": [
+          "cp",
+          "p_m",
+          "p_t",
+          "p_r",
+          "obs_p"
+        ]
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001",
+        "AUTH-QUERY-001"
+      ],
+      "label": "clause 1 (P)"
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "o_read_q",
+          "w_read_q"
+        ],
+        "protected_from": [
+          "cq",
+          "q_m",
+          "obs_q"
+        ]
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001",
+        "AUTH-QUERY-001"
+      ],
+      "label": "clause 1 (Q)"
+    },
+    {
+      "invariant": {
+        "steps": [
+          "o_read_p",
+          "o_read_q"
+        ],
+        "content": true
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 2 invariance (outsider)"
+    },
+    {
+      "invariant": {
+        "steps": [
+          "w_read_p",
+          "w_read_q"
+        ],
+        "content": true
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 2 invariance (writer-no-read)"
+    },
+    {
+      "observer_unchanged": {
+        "before": "obs_p",
+        "after": "after_p"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    }
+  ]
+}

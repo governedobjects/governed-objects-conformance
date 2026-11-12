@@ -1,0 +1,189 @@
+{
+  "id": "D22-CS4-001",
+  "title": "Restored history with reversed, equal and future timestamps keeps acceptance order",
+  "cs": [
+    "CS-4"
+  ],
+  "requirements": [
+    "EVT-ORDER-001",
+    "EVT-CONTENT-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "declared restoration capability (restoration: true, restorable_types contains conformance.record)",
+    "claims": [
+      {
+        "capability": "restoration"
+      },
+      {
+        "capability": "restorable_types",
+        "contains": "conformance.record"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "restore",
+      "as": "r",
+      "actor": "restorer",
+      "objects": [
+        {
+          "canonical_identity": "cs4-a",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs4-a-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-cs4-a"
+            }
+          ],
+          "current_object_version": "7300444",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "7300421",
+              "post_image": {
+                "title": "cs4-a-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "7300430",
+              "post_image": {
+                "title": "cs4-a-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "7300431",
+              "post_image": {
+                "title": "cs4-a-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "7300444",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs4-a"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ],
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs4-a"
+    },
+    {
+      "op": "get_history",
+      "as": "h_again",
+      "object_id": "cs4-a"
+    },
+    {
+      "op": "mutate",
+      "as": "next",
+      "actor": "writer",
+      "object_id": "cs4-a",
+      "changes": {
+        "title": "cs4-after"
+      },
+      "type": "conformance.record"
+    },
+    {
+      "op": "get_history",
+      "as": "h2",
+      "object_id": "cs4-a"
+    }
+  ],
+  "assert": [
+    {
+      "history_equals": {
+        "step": "h",
+        "expected": [
+          {
+            "effect": "object_created"
+          },
+          {
+            "effect": "state_updated"
+          },
+          {
+            "effect": "lifecycle_transition"
+          },
+          {
+            "effect": "relationship_added"
+          }
+        ]
+      },
+      "requirements": [
+        "EVT-ORDER-001"
+      ]
+    },
+    {
+      "history_same_as": {
+        "step": "h",
+        "other": "h_again"
+      },
+      "requirements": [
+        "EVT-ORDER-001"
+      ]
+    },
+    {
+      "history_equals": {
+        "step": "h2",
+        "expected": [
+          {
+            "effect": "object_created"
+          },
+          {
+            "effect": "state_updated"
+          },
+          {
+            "effect": "lifecycle_transition"
+          },
+          {
+            "effect": "relationship_added"
+          },
+          {
+            "effect": "state_updated"
+          }
+        ]
+      },
+      "requirements": [
+        "EVT-ORDER-001"
+      ],
+      "label": "a new change is ordered after a future-dated entry"
+    },
+    {
+      "record": {
+        "label": "restored timestamps",
+        "history": "$h.canonical_history"
+      }
+    }
+  ]
+}

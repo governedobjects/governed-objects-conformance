@@ -1,0 +1,11 @@
+{
+  "id": "C-CON-005",
+  "title": "Unconditional mutation accepted when expected version omitted",
+  "requirements": ["CON-VERSION-001"],
+  "requires_capabilities": {"unconditional_mutation": true, "mutable_objects": true},
+  "steps": [
+    {"op": "create", "actor": "writer", "object_id": "wi-con-005", "type": "conformance.work-item", "initial_state": {"title": "U1"}},
+    {"op": "mutate", "as": "unconditional", "actor": "writer", "object_id": "wi-con-005", "changes": {"title": "U2"}}
+  ],
+  "assert": [{"step": "unconditional", "outcome": "ACCEPTED"}]
+}

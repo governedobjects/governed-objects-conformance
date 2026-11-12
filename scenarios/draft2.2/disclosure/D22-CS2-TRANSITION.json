@@ -1,0 +1,291 @@
+{
+  "id": "D22-CS2-TRANSITION",
+  "title": "Outsider lifecycle transition to completed: valid for P (active), invalid for Q (draft) with no/current/stale/never-issued token discloses nothing and does not vary",
+  "cs": [
+    "CS-2",
+    "CS-3"
+  ],
+  "requirements": [
+    "AUTH-DISCLOSE-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001",
+    "AUTH-BASE-001"
+  ],
+  "modality": "MUST",
+  "steps": [
+    {
+      "op": "create",
+      "as": "cp",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs2-secret-p"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "p_m",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "changes": {
+        "title": "cs2-secret-p2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "transition",
+      "as": "p_t",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "to": "active",
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "add_relationship",
+      "as": "p_r",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "relationship": {
+        "type": "owned_by",
+        "target": "cs2-party-p"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "create",
+      "as": "cq",
+      "actor": "writer",
+      "object_id": "cs2-q",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs2-secret-q"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "q_m",
+      "actor": "writer",
+      "object_id": "cs2-q",
+      "changes": {
+        "title": "cs2-secret-q2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_p",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_q",
+      "object_id": "cs2-q"
+    },
+    {
+      "op": "transition",
+      "as": "p_none",
+      "actor": "outsider",
+      "object_id": "cs2-p",
+      "to": "completed"
+    },
+    {
+      "op": "transition",
+      "as": "p_current",
+      "actor": "outsider",
+      "object_id": "cs2-p",
+      "to": "completed",
+      "expected_version": "$obs_p.semantic_view.object_version"
+    },
+    {
+      "op": "transition",
+      "as": "p_stale",
+      "actor": "outsider",
+      "object_id": "cs2-p",
+      "to": "completed",
+      "expected_version": "$cp.semantic_view.object_version"
+    },
+    {
+      "op": "transition",
+      "as": "p_never",
+      "actor": "outsider",
+      "object_id": "cs2-p",
+      "to": "completed",
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "transition",
+      "as": "q_none",
+      "actor": "outsider",
+      "object_id": "cs2-q",
+      "to": "completed"
+    },
+    {
+      "op": "transition",
+      "as": "q_current",
+      "actor": "outsider",
+      "object_id": "cs2-q",
+      "to": "completed",
+      "expected_version": "$obs_q.semantic_view.object_version"
+    },
+    {
+      "op": "transition",
+      "as": "q_stale",
+      "actor": "outsider",
+      "object_id": "cs2-q",
+      "to": "completed",
+      "expected_version": "$cq.semantic_view.object_version"
+    },
+    {
+      "op": "transition",
+      "as": "q_never",
+      "actor": "outsider",
+      "object_id": "cs2-q",
+      "to": "completed",
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_p",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_q",
+      "object_id": "cs2-q"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_not": {
+        "steps": [
+          "p_none",
+          "p_current",
+          "p_stale",
+          "p_never",
+          "q_none",
+          "q_current",
+          "q_stale",
+          "q_never"
+        ],
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "p_none",
+          "p_current",
+          "p_stale",
+          "p_never"
+        ],
+        "protected_from": [
+          "cp",
+          "p_m",
+          "p_t",
+          "p_r",
+          "obs_p"
+        ]
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 1 (P)"
+    },
+    {
+      "no_disclosure": {
+        "steps": [
+          "q_none",
+          "q_current",
+          "q_stale",
+          "q_never"
+        ],
+        "protected_from": [
+          "cq",
+          "q_m",
+          "obs_q"
+        ]
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 1 (Q)"
+    },
+    {
+      "invariant": {
+        "steps": [
+          "p_none",
+          "p_current",
+          "p_stale",
+          "p_never",
+          "q_none",
+          "q_current",
+          "q_stale",
+          "q_never"
+        ],
+        "content": true
+      },
+      "requirements": [
+        "AUTH-DISCLOSE-001"
+      ],
+      "label": "clause 2 invariance"
+    },
+    {
+      "observer_unchanged": {
+        "before": "obs_p",
+        "after": "after_p"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "obs_q",
+        "after": "after_q"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001",
+        "CON-NOADVANCE-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs2-p",
+        "history": "after_p"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs2-q",
+        "history": "after_q"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    }
+  ]
+}

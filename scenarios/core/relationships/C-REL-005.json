@@ -1,0 +1,75 @@
+{
+  "id": "C-REL-005",
+  "title": "Replay reconstructs accepted relationships",
+  "requirements": [
+    "EVT-REPLAY-001",
+    "REL-ACCEPT-001"
+  ],
+  "requires_capabilities": {
+    "replay": true,
+    "relationship_add": true
+  },
+  "skip_if_missing": [
+    "replay",
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-rel-005",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Replay"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "actor": "writer",
+      "object_id": "wi-rel-005",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-1"
+      }
+    },
+    {
+      "op": "semantic_view",
+      "as": "live",
+      "object_id": "wi-rel-005"
+    },
+    {
+      "op": "replay",
+      "as": "replayed",
+      "object_id": "wi-rel-005"
+    }
+  ],
+  "assert": [
+    {
+      "step": "replayed",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_exists": {
+        "type": "owned_by",
+        "target": "party-1"
+      },
+      "step": "replayed"
+    },
+    {
+      "compare": "$replayed.semantic_view.canonical_identity",
+      "equals": "$live.semantic_view.canonical_identity"
+    },
+    {
+      "compare": "$replayed.semantic_view.type_identity",
+      "equals": "$live.semantic_view.type_identity"
+    },
+    {
+      "compare": "$replayed.semantic_view.type_version",
+      "equals": "$live.semantic_view.type_version"
+    },
+    {
+      "relationship_set_equals": "live",
+      "step": "replayed"
+    }
+  ]
+}

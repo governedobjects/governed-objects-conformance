@@ -1,0 +1,20 @@
+{
+  "inherited_scenario_roots": [
+    "scenarios/core",
+    "scenarios/draft2.1"
+  ],
+  "draft22_scenario_root": "scenarios/draft2.2",
+  "inherited_map_path": "scenarios/draft2.2/inherited-map.json",
+  "exclude_scenarios": [
+    "C-TYPE-003"
+  ],
+  "requirements_path": "scenarios/draft2.2/requirements.json",
+  "relationship_comparison": "set_with_uniqueness",
+  "claim_limitations": [
+    "Core only. Portable Restoration Continuity and every other optional profile are out of scope; restoration is used only as a harness path to reach Core behavior (PORT-RESTORE-001, PORT-PRESERVE-001 as applicable).",
+    "Observations of canonical effects use an administrative observer channel supplied by each adapter; caller-visible checks use only the raw runtime return value.",
+    "Concurrent invocation is NOT EXECUTABLE; single-lineage and conflict behavior is checked sequentially. This evidence does not establish the thread safety or concurrent behavior of the implementation under test; native tests remain complementary.",
+    "Native timestamp independence is NOT EXECUTABLE when the adapter exposes no clock hook for accepted history.",
+    "Timing and other side channels are outside AUTH-DISCLOSE-001 and are not measured."
+  ]
+}

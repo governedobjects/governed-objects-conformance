@@ -1,0 +1,118 @@
+{
+  "id": "C-REL-009",
+  "title": "Duplicate relationship add is an accepted canonical no-op",
+  "requirements": [
+    "REL-DUP-001",
+    "REL-NOOP-001",
+    "REL-MULT-001",
+    "CON-NOADVANCE-001",
+    "OP-HIST-001"
+  ],
+  "spec_revision": "draft2.1",
+  "requires_capabilities": {
+    "relationship_add": true
+  },
+  "skip_if_missing": [
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-rel-009",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "DupAdd"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "first_add",
+      "actor": "writer",
+      "object_id": "wi-rel-009",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-009"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-rel-009"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-rel-009"
+    },
+    {
+      "op": "add_relationship",
+      "as": "duplicate_add",
+      "actor": "writer",
+      "object_id": "wi-rel-009",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-009"
+      },
+      "expected_version": "$before.semantic_view.object_version"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-rel-009"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-rel-009"
+    }
+  ],
+  "assert": [
+    {
+      "step": "first_add",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_exists": {
+        "type": "belongs_to",
+        "target": "party-rel-009"
+      },
+      "step": "before"
+    },
+    {
+      "relationship_collection_unique": true,
+      "step": "before"
+    },
+    {
+      "step": "duplicate_add",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_triple_count": {
+        "type": "belongs_to",
+        "target": "party-rel-009",
+        "count": 1
+      },
+      "step": "after"
+    },
+    {
+      "relationship_collection_unique": true,
+      "step": "after"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "after"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "history_unchanged": "history_before",
+      "step": "history_after"
+    }
+  ]
+}

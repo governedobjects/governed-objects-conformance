@@ -1,0 +1,154 @@
+{
+  "id": "D22-CS2S-RELADD",
+  "title": "Reader without mutation authority, stale token, relationship add of (owned_by, cs2-party-p): authorization first (SHOULD)",
+  "cs": [
+    "CS-2S"
+  ],
+  "requirements": [
+    "AUTH-ORDER-001",
+    "CON-CONFLICT-001",
+    "OP-NOCHANGE-001"
+  ],
+  "modality": "SHOULD",
+  "steps": [
+    {
+      "op": "create",
+      "as": "cp",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs2-secret-p"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "p_m",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "changes": {
+        "title": "cs2-secret-p2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "transition",
+      "as": "p_t",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "to": "active",
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "add_relationship",
+      "as": "p_r",
+      "actor": "writer",
+      "object_id": "cs2-p",
+      "relationship": {
+        "type": "owned_by",
+        "target": "cs2-party-p"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "create",
+      "as": "cq",
+      "actor": "writer",
+      "object_id": "cs2-q",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs2-secret-q"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "q_m",
+      "actor": "writer",
+      "object_id": "cs2-q",
+      "changes": {
+        "title": "cs2-secret-q2"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_p",
+      "object_id": "cs2-p"
+    },
+    {
+      "op": "semantic_view",
+      "as": "obs_q",
+      "object_id": "cs2-q"
+    },
+    {
+      "op": "add_relationship",
+      "as": "reader_stale",
+      "actor": "reader",
+      "object_id": "cs2-p",
+      "relationship": {
+        "type": "owned_by",
+        "target": "cs2-party-p"
+      },
+      "expected_version": "$cp.semantic_view.object_version"
+    },
+    {
+      "op": "semantic_view",
+      "as": "after_p",
+      "object_id": "cs2-p"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_in": {
+        "step": "reader_stale",
+        "outcomes": [
+          "AUTHORIZATION_DENIED"
+        ]
+      },
+      "level": "SHOULD",
+      "requirements": [
+        "AUTH-ORDER-001"
+      ],
+      "label": "authorization-first"
+    },
+    {
+      "outcome_not": {
+        "steps": [
+          "reader_stale"
+        ],
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "level": "MUST",
+      "requirements": [
+        "CON-CONFLICT-001",
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "obs_p",
+        "after": "after_p"
+      },
+      "level": "MUST",
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    }
+  ]
+}

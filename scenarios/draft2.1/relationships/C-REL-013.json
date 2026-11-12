@@ -1,0 +1,120 @@
+{
+  "id": "C-REL-013",
+  "title": "Stale duplicate add conflicts without canonical effect",
+  "requirements": [
+    "REL-PRECOND-001",
+    "REL-PRECEDENCE-001",
+    "CON-CONFLICT-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "spec_revision": "draft2.1",
+  "requires_capabilities": {
+    "relationship_add": true
+  },
+  "skip_if_missing": [
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-rel-013",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "StaleDup"
+      }
+    },
+    {
+      "op": "read",
+      "as": "v1",
+      "actor": "writer",
+      "object_id": "wi-rel-013"
+    },
+    {
+      "op": "add_relationship",
+      "as": "first_add",
+      "actor": "writer",
+      "object_id": "wi-rel-013",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-013"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-rel-013"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-rel-013"
+    },
+    {
+      "op": "add_relationship",
+      "as": "stale_dup",
+      "actor": "writer",
+      "object_id": "wi-rel-013",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-013"
+      },
+      "expected_version": "$v1.semantic_view.object_version"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-rel-013"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-rel-013"
+    }
+  ],
+  "assert": [
+    {
+      "step": "first_add",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_exists": {
+        "type": "belongs_to",
+        "target": "party-rel-013"
+      },
+      "step": "before"
+    },
+    {
+      "compare": "$before.semantic_view.object_version",
+      "not_equals": "$v1.semantic_view.object_version"
+    },
+    {
+      "step": "stale_dup",
+      "outcome": "CONFLICT"
+    },
+    {
+      "relationship_triple_count": {
+        "type": "belongs_to",
+        "target": "party-rel-013",
+        "count": 1
+      },
+      "step": "after"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "after"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "history_unchanged": "history_before",
+      "step": "history_after"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "D22-CON-001",
+  "title": "Concurrent conditional mutations of one object yield one accepted change and one lineage",
+  "cs": [],
+  "requirements": [
+    "CON-CONFLICT-001",
+    "CORE-LINEAGE-001",
+    "CON-UNIQUE-001"
+  ],
+  "modality": "MUST",
+  "harness_requires": [
+    {
+      "capability": "concurrent_invocation"
+    }
+  ],
+  "note": "Covered sequentially by CS-1, CS-7 and CS-9. The adapters invoke the runtime serially.",
+  "steps": [
+    {
+      "op": "concurrent",
+      "note": "two writers race with the same expected version"
+    }
+  ],
+  "assert": []
+}

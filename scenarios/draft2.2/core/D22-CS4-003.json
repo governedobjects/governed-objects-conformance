@@ -1,0 +1,25 @@
+{
+  "id": "D22-CS4-003",
+  "title": "Natively accepted changes with equal, reversed or future clock timestamps keep acceptance order",
+  "cs": [
+    "CS-4"
+  ],
+  "requirements": [
+    "EVT-ORDER-001",
+    "EVT-CONTENT-001"
+  ],
+  "modality": "MUST",
+  "harness_requires": [
+    {
+      "capability": "harness_clock"
+    }
+  ],
+  "note": "Core, unconditional. Needs a harness clock or timestamp-injection hook governing accepted-history timestamps.",
+  "steps": [
+    {
+      "op": "set_clock",
+      "at": "2099-01-01T00:00:00Z"
+    }
+  ],
+  "assert": []
+}

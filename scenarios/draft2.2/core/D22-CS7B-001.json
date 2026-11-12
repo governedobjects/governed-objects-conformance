@@ -1,0 +1,123 @@
+{
+  "id": "D22-CS7B-001",
+  "title": "Operational-metadata-only detach leaves the lineage unchanged and the pre-detach token current",
+  "cs": [
+    "CS-7b"
+  ],
+  "requirements": [
+    "CORE-LINEAGE-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "an exposed operational-metadata-only operation (operational_metadata_ops non-empty)",
+    "claims": [
+      {
+        "capability": "operational_metadata_ops",
+        "contains": "detach_provider"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "writer",
+      "object_id": "cs7b-a",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs7b-bound"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ],
+      "operational_metadata": {
+        "provider_binding": {
+          "provider_type": "generic",
+          "provider_name": "local",
+          "external_id": "ext-cs7b"
+        }
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "before",
+      "object_id": "cs7b-a"
+    },
+    {
+      "op": "detach",
+      "as": "detach",
+      "actor": "writer",
+      "object_id": "cs7b-a",
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "after",
+      "object_id": "cs7b-a"
+    },
+    {
+      "op": "mutate",
+      "as": "pre_detach_token",
+      "actor": "writer",
+      "object_id": "cs7b-a",
+      "changes": {
+        "title": "cs7b-after"
+      },
+      "expected_version": "$before.semantic_view.object_version"
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs7b-a"
+    }
+  ],
+  "assert": [
+    {
+      "observer_field": {
+        "step": "before",
+        "path": "operational_metadata.provider_binding.external_id",
+        "equals": "ext-cs7b"
+      },
+      "label": "object was bound"
+    },
+    {
+      "observer_field": {
+        "step": "after",
+        "path": "operational_metadata.provider_binding",
+        "equals": null
+      },
+      "label": "binding removed"
+    },
+    {
+      "observer_unchanged": {
+        "before": "before",
+        "after": "after"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "pre_detach_token",
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs7b-a",
+        "history": "h"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ]
+    }
+  ]
+}

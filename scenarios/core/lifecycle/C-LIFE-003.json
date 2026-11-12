@@ -1,0 +1,86 @@
+{
+  "id": "C-LIFE-003",
+  "title": "completed to draft transition semantically invalid",
+  "requirements": [
+    "TYPE-VALID-001",
+    "OP-NOCHANGE-001"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "actor": "writer",
+      "object_id": "wi-life-003",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Task"
+      }
+    },
+    {
+      "op": "transition",
+      "actor": "writer",
+      "object_id": "wi-life-003",
+      "to": "active"
+    },
+    {
+      "op": "transition",
+      "actor": "writer",
+      "object_id": "wi-life-003",
+      "to": "completed"
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-life-003"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-life-003"
+    },
+    {
+      "op": "transition",
+      "as": "invalid",
+      "actor": "writer",
+      "object_id": "wi-life-003",
+      "to": "draft"
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-life-003"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-life-003"
+    }
+  ],
+  "assert": [
+    {
+      "step": "invalid",
+      "outcome": "SEMANTICALLY_INVALID"
+    },
+    {
+      "compare": "$invalid.semantic_view.accepted_state.status",
+      "equals": "completed"
+    },
+    {
+      "compare": "$after.semantic_view.accepted_state",
+      "equals": "$before.semantic_view.accepted_state"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "after"
+    },
+    {
+      "compare": "$invalid.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "compare": "$history_after.canonical_history",
+      "equals": "$history_before.canonical_history"
+    }
+  ]
+}

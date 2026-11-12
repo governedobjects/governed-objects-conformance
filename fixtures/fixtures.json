@@ -1,0 +1,188 @@
+{
+  "fixtures_format": "governed-objects-conformance-fixtures/1",
+  "description": "Suite-owned definitions of every fixture type, actor and fixture rule the Draft 2.2 Core scenarios depend on. Adapters implement these definitions through the runtime under test and must not add, drop or change rules. Sent to the adapter in the define_fixture_types request.",
+  "fixtures_version": "1",
+  "permissions": {
+    "read": "may read the object",
+    "create": "may create objects",
+    "update": "may change accepted state fields",
+    "transition": "may request lifecycle transitions",
+    "add_relationship": "may add relationships",
+    "remove_relationship": "may remove relationships",
+    "import": "may restore an interchange bundle"
+  },
+  "actors": {
+    "writer": [
+      "read",
+      "create",
+      "update",
+      "transition",
+      "add_relationship",
+      "remove_relationship"
+    ],
+    "former-writer": [
+      "read",
+      "create",
+      "update",
+      "transition",
+      "add_relationship",
+      "remove_relationship"
+    ],
+    "reader": [
+      "read"
+    ],
+    "writer-no-read": [
+      "update",
+      "transition",
+      "add_relationship",
+      "remove_relationship"
+    ],
+    "restorer": [
+      "import"
+    ],
+    "outsider": [],
+    "hist-actor": []
+  },
+  "types": {
+    "conformance.work-item": {
+      "version": "1",
+      "fields": {
+        "title": "string",
+        "status": "lifecycle"
+      },
+      "required_on_create": [
+        "title"
+      ],
+      "lifecycle": {
+        "field": "status",
+        "initial": "draft",
+        "states": [
+          "draft",
+          "active",
+          "completed"
+        ],
+        "transitions": [
+          [
+            "draft",
+            "active"
+          ],
+          [
+            "active",
+            "completed"
+          ]
+        ]
+      },
+      "create_defaults": {
+        "status": "draft"
+      },
+      "actions": {
+        "update": {
+          "kind": "state"
+        },
+        "activate": {
+          "kind": "lifecycle",
+          "from": [
+            "draft"
+          ],
+          "to": "active"
+        },
+        "complete": {
+          "kind": "lifecycle",
+          "from": [
+            "active"
+          ],
+          "to": "completed"
+        }
+      },
+      "rules": [
+        {
+          "id": "title-not-blank",
+          "field": "title",
+          "rule": "non-blank-string",
+          "applies_to": [
+            "create",
+            "update"
+          ],
+          "description": "A title that is empty or only whitespace is refused as semantically invalid and changes nothing."
+        }
+      ]
+    },
+    "conformance.record": {
+      "version": "1",
+      "fields": {
+        "title": "string",
+        "status": "lifecycle"
+      },
+      "lifecycle": {
+        "field": "status",
+        "states": [
+          "draft",
+          "active",
+          "completed"
+        ],
+        "transitions": [
+          [
+            "draft",
+            "active"
+          ],
+          [
+            "active",
+            "completed"
+          ]
+        ]
+      },
+      "relationship_types": [
+        "owned_by",
+        "depends_on",
+        "belongs_to"
+      ],
+      "actions": {
+        "update": {
+          "kind": "state"
+        },
+        "activate": {
+          "kind": "lifecycle",
+          "from": [
+            "draft"
+          ],
+          "to": "active"
+        },
+        "complete": {
+          "kind": "lifecycle",
+          "from": [
+            "active"
+          ],
+          "to": "completed"
+        }
+      },
+      "rules": []
+    },
+    "conformance.party": {
+      "version": "1",
+      "fields": {
+        "name": "string",
+        "status": "lifecycle"
+      },
+      "required_on_create": [
+        "name"
+      ],
+      "lifecycle": {
+        "field": "status",
+        "initial": "active",
+        "states": [
+          "active"
+        ],
+        "transitions": []
+      },
+      "create_defaults": {
+        "status": "active"
+      },
+      "actions": {
+        "update": {
+          "kind": "state"
+        }
+      },
+      "rules": []
+    }
+  }
+}

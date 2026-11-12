@@ -1,0 +1,156 @@
+{
+  "id": "D22-CS9-001",
+  "title": "A precondition on a never-issued token is not accepted (every mutation family)",
+  "cs": [
+    "CS-9"
+  ],
+  "requirements": [
+    "CON-CONFLICT-001",
+    "CON-UNIQUE-001",
+    "OP-NOCHANGE-001"
+  ],
+  "modality": "MUST",
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "writer",
+      "object_id": "cs9-a",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "cs9"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "add_relationship",
+      "as": "ra",
+      "actor": "writer",
+      "object_id": "cs9-a",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-cs9"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs9-a"
+    },
+    {
+      "op": "mutate",
+      "as": "never_u",
+      "actor": "writer",
+      "object_id": "cs9-a",
+      "changes": {
+        "title": "cs9-x"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "transition",
+      "as": "never_t",
+      "actor": "writer",
+      "object_id": "cs9-a",
+      "to": "active",
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "add_relationship",
+      "as": "never_ra",
+      "actor": "writer",
+      "object_id": "cs9-a",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-new"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "never_rr",
+      "actor": "writer",
+      "object_id": "cs9-a",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-cs9"
+      },
+      "expected_version": "$caps.never_issued_version_token:900000001"
+    },
+    {
+      "op": "get_history",
+      "as": "h2",
+      "object_id": "cs9-a"
+    }
+  ],
+  "assert": [
+    {
+      "version_in_history": {
+        "version": "$caps.never_issued_version_token:900000001",
+        "step": "h",
+        "expect": false
+      },
+      "label": "token was never issued"
+    },
+    {
+      "outcome_in": {
+        "step": "never_u",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "never_t",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "never_ra",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001",
+        "REL-PRECOND-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "never_rr",
+        "outcomes": [
+          "CONFLICT"
+        ]
+      },
+      "requirements": [
+        "CON-CONFLICT-001",
+        "REL-PRECOND-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "h",
+        "after": "h2"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    }
+  ]
+}

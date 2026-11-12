@@ -1,0 +1,68 @@
+{
+  "id": "C-REL-003",
+  "title": "Relationship add advances shared object version",
+  "requirements": [
+    "REL-ACCEPT-001",
+    "CON-ADVANCE-001",
+    "OP-HIST-001"
+  ],
+  "requires_capabilities": {
+    "relationship_add": true
+  },
+  "skip_if_missing": [
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-rel-003",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "Rel"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "added",
+      "actor": "writer",
+      "object_id": "wi-rel-003",
+      "relationship": {
+        "type": "depends_on",
+        "target": "wi-dep"
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "history",
+      "object_id": "wi-rel-003"
+    }
+  ],
+  "assert": [
+    {
+      "step": "added",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_exists": {
+        "type": "depends_on",
+        "target": "wi-dep"
+      },
+      "step": "added"
+    },
+    {
+      "compare": "$added.semantic_view.object_version",
+      "not_equals": "$created.semantic_view.object_version"
+    },
+    {
+      "history_contains": {
+        "effect": "relationship_added",
+        "object_version": "$added.semantic_view.object_version",
+        "relationship_type": "depends_on",
+        "relationship_target": "wi-dep"
+      },
+      "step": "history"
+    }
+  ]
+}

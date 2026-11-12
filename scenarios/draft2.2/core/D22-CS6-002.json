@@ -1,0 +1,303 @@
+{
+  "id": "D22-CS6-002",
+  "title": "Historical actor of a restored object gains no authority",
+  "cs": [
+    "CS-6"
+  ],
+  "requirements": [
+    "AUTH-BASE-001",
+    "PORT-RESTORE-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "declared restoration capability (restoration: true, restorable_types contains conformance.record)",
+    "claims": [
+      {
+        "capability": "restoration"
+      },
+      {
+        "capability": "restorable_types",
+        "contains": "conformance.record"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "restore",
+      "as": "r",
+      "actor": "restorer",
+      "objects": [
+        {
+          "canonical_identity": "cs6r-a",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs6r-a-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-cs6r-a"
+            }
+          ],
+          "current_object_version": "7300444",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "7300421",
+              "post_image": {
+                "title": "cs6r-a-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "7300430",
+              "post_image": {
+                "title": "cs6r-a-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "7300431",
+              "post_image": {
+                "title": "cs6r-a-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "7300444",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs6r-a"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ],
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs6r-a"
+    },
+    {
+      "op": "mutate",
+      "as": "u",
+      "actor": "hist-actor",
+      "object_id": "cs6r-a",
+      "changes": {
+        "title": "cs6r-attempt"
+      },
+      "expected_version": "$h.semantic_view.object_version",
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "t",
+      "actor": "hist-actor",
+      "object_id": "cs6r-a",
+      "to": "completed",
+      "expected_version": "$h.semantic_view.object_version",
+      "type": "conformance.record"
+    },
+    {
+      "op": "add_relationship",
+      "as": "ra",
+      "actor": "hist-actor",
+      "object_id": "cs6r-a",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-other"
+      },
+      "expected_version": "$h.semantic_view.object_version"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "rr",
+      "actor": "hist-actor",
+      "object_id": "cs6r-a",
+      "relationship": {
+        "type": "depends_on",
+        "target": "p-cs6r-a"
+      },
+      "expected_version": "$h.semantic_view.object_version"
+    },
+    {
+      "op": "restore",
+      "as": "hist_restore",
+      "actor": "hist-actor",
+      "objects": [
+        {
+          "canonical_identity": "cs6r-b",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs6r-b-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-cs6r-b"
+            }
+          ],
+          "current_object_version": "7300444",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "7300421",
+              "post_image": {
+                "title": "cs6r-b-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "7300430",
+              "post_image": {
+                "title": "cs6r-b-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "7300431",
+              "post_image": {
+                "title": "cs6r-b-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "7300444",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs6r-b"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h2",
+      "object_id": "cs6r-a"
+    }
+  ],
+  "assert": [
+    {
+      "history_contains": {
+        "actor": "hist-actor"
+      },
+      "step": "h",
+      "label": "actor is in history"
+    },
+    {
+      "outcome_in": {
+        "step": "u",
+        "outcomes": [
+          "AUTHORIZATION_DENIED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "t",
+        "outcomes": [
+          "AUTHORIZATION_DENIED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "ra",
+        "outcomes": [
+          "AUTHORIZATION_DENIED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "rr",
+        "outcomes": [
+          "AUTHORIZATION_DENIED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "outcome_not": {
+        "steps": [
+          "hist_restore"
+        ],
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "AUTH-BASE-001"
+      ],
+      "label": "historical actor cannot restore"
+    },
+    {
+      "observer_absent": "hist_restore",
+      "requirements": [
+        "AUTH-BASE-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "h",
+        "after": "h2"
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    }
+  ]
+}

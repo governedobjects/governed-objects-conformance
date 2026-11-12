@@ -1,0 +1,17 @@
+{
+  "id": "C-ID-001",
+  "title": "Canonical identity remains stable through accepted mutations",
+  "requirements": ["CORE-ID-001", "CORE-ID-002"],
+  "steps": [
+    {"op": "create", "as": "created", "actor": "writer", "object_id": "wi-id-001", "type": "conformance.work-item", "initial_state": {"title": "Stable"}},
+    {"op": "mutate", "as": "mutated", "actor": "writer", "object_id": "wi-id-001", "changes": {"title": "Still Stable"}},
+    {"op": "transition", "as": "active", "actor": "writer", "object_id": "wi-id-001", "to": "active"},
+    {"op": "semantic_view", "as": "view", "object_id": "wi-id-001"}
+  ],
+  "assert": [
+    {"semantic_view_field": "canonical_identity", "step": "created", "equals": "wi-id-001"},
+    {"semantic_view_field": "canonical_identity", "step": "mutated", "equals": "wi-id-001"},
+    {"semantic_view_field": "canonical_identity", "step": "active", "equals": "wi-id-001"},
+    {"semantic_view_field": "canonical_identity", "step": "view", "equals": "wi-id-001"}
+  ]
+}

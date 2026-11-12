@@ -1,0 +1,16 @@
+{
+  "name": "governed-objects-conformance",
+  "version_file": "VERSION",
+  "integrity_manifest": "SUITE-MANIFEST.json",
+  "fixtures": "fixtures/fixtures.json",
+  "targets": [
+    {
+      "spec_version": "v0alpha1",
+      "spec_revision": "draft2.2",
+      "profile_scope": "Core",
+      "scenario_manifest": "scenarios/manifests/draft2.2.json",
+      "spec_identity_note": "spec_version and spec_revision in this target state the specification revision this suite version targets (the scenario and requirement files under scenarios/ also state it). Update them here, and the identifiers the adapters declare, if the public specification revision is retitled."
+    }
+  ],
+  "note": "The suite version lives only in VERSION. This file states which specification revision each suite version targets, and is the single source of that identity. Suite, specification and runtime version numbers are independent."
+}

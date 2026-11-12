@@ -1,0 +1,102 @@
+{
+  "id": "C-REL-011",
+  "title": "Unauthorized duplicate add is denied without canonical effect",
+  "requirements": [
+    "REL-AUTH-001",
+    "REL-PRECEDENCE-001",
+    "AUTH-BASE-001",
+    "OP-NOCHANGE-001",
+    "CON-NOADVANCE-001"
+  ],
+  "spec_revision": "draft2.1",
+  "requires_capabilities": {
+    "relationship_add": true
+  },
+  "skip_if_missing": [
+    "relationship_add"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "created",
+      "actor": "writer",
+      "object_id": "wi-rel-011",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "AuthDup"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "first_add",
+      "actor": "writer",
+      "object_id": "wi-rel-011",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-011"
+      }
+    },
+    {
+      "op": "read",
+      "as": "before",
+      "actor": "writer",
+      "object_id": "wi-rel-011"
+    },
+    {
+      "op": "get_history",
+      "as": "history_before",
+      "object_id": "wi-rel-011"
+    },
+    {
+      "op": "add_relationship",
+      "as": "denied_dup",
+      "actor": "reader",
+      "object_id": "wi-rel-011",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-011"
+      }
+    },
+    {
+      "op": "read",
+      "as": "after",
+      "actor": "writer",
+      "object_id": "wi-rel-011"
+    },
+    {
+      "op": "get_history",
+      "as": "history_after",
+      "object_id": "wi-rel-011"
+    }
+  ],
+  "assert": [
+    {
+      "step": "first_add",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "step": "denied_dup",
+      "outcome": "AUTHORIZATION_DENIED"
+    },
+    {
+      "relationship_triple_count": {
+        "type": "belongs_to",
+        "target": "party-rel-011",
+        "count": 1
+      },
+      "step": "after"
+    },
+    {
+      "relationship_set_equals": "before",
+      "step": "after"
+    },
+    {
+      "compare": "$after.semantic_view.object_version",
+      "equals": "$before.semantic_view.object_version"
+    },
+    {
+      "history_unchanged": "history_before",
+      "step": "history_after"
+    }
+  ]
+}

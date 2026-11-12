@@ -1,0 +1,253 @@
+{
+  "id": "D22-CS7-002",
+  "title": "Single lineage across accepted, rejected, no-op, read and restart operations (conformance.record)",
+  "cs": [
+    "CS-7"
+  ],
+  "requirements": [
+    "CORE-LINEAGE-001",
+    "CORE-HIST-001",
+    "CON-NOADVANCE-001",
+    "REL-NOOP-001"
+  ],
+  "modality": "MUST",
+  "harness_requires": [
+    {
+      "capability": "restart"
+    }
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "c",
+      "actor": "writer",
+      "object_id": "cs7-r",
+      "type": "conformance.record",
+      "initial_state": {
+        "title": "cs7-r-t0",
+        "status": "draft"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "mutate",
+      "as": "m1",
+      "actor": "writer",
+      "object_id": "cs7-r",
+      "changes": {
+        "title": "cs7-r-t1"
+      },
+      "type": "conformance.record",
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "read",
+      "as": "rd",
+      "actor": "reader",
+      "object_id": "cs7-r"
+    },
+    {
+      "op": "mutate",
+      "as": "outsider_u",
+      "actor": "outsider",
+      "object_id": "cs7-r",
+      "changes": {
+        "title": "cs7-r-x"
+      },
+      "expected_version": "$c.semantic_view.object_version",
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "reader_u",
+      "actor": "reader",
+      "object_id": "cs7-r",
+      "changes": {
+        "title": "cs7-r-x"
+      },
+      "type": "conformance.record"
+    },
+    {
+      "op": "mutate",
+      "as": "stale_u",
+      "actor": "writer",
+      "object_id": "cs7-r",
+      "changes": {
+        "title": "cs7-r-x"
+      },
+      "expected_version": "$c.semantic_view.object_version",
+      "type": "conformance.record"
+    },
+    {
+      "op": "transition",
+      "as": "invalid_t",
+      "actor": "writer",
+      "object_id": "cs7-r",
+      "to": "completed",
+      "type": "conformance.record"
+    },
+    {
+      "op": "add_relationship",
+      "as": "ra",
+      "actor": "writer",
+      "object_id": "cs7-r",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-cs7"
+      },
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "add_relationship",
+      "as": "ra_dup",
+      "actor": "writer",
+      "object_id": "cs7-r",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-cs7"
+      }
+    },
+    {
+      "op": "remove_relationship",
+      "as": "rr_absent",
+      "actor": "writer",
+      "object_id": "cs7-r",
+      "relationship": {
+        "type": "owned_by",
+        "target": "party-other"
+      }
+    },
+    {
+      "op": "get_history",
+      "as": "h_pre",
+      "object_id": "cs7-r"
+    },
+    {
+      "op": "restart",
+      "as": "restart",
+      "precondition_outcomes": [
+        "ACCEPTED"
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h_post",
+      "object_id": "cs7-r"
+    },
+    {
+      "op": "transition",
+      "as": "after_restart",
+      "actor": "writer",
+      "object_id": "cs7-r",
+      "to": "active",
+      "expected_version": "$h_post.semantic_view.object_version",
+      "type": "conformance.record"
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs7-r"
+    }
+  ],
+  "assert": [
+    {
+      "outcome_in": {
+        "step": "ra_dup",
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "REL-DUP-001"
+      ]
+    },
+    {
+      "outcome_in": {
+        "step": "rr_absent",
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "REL-ABSENT-001"
+      ]
+    },
+    {
+      "outcome_not": {
+        "steps": [
+          "outsider_u",
+          "reader_u",
+          "stale_u",
+          "invalid_t"
+        ],
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "OP-NOCHANGE-001"
+      ]
+    },
+    {
+      "observer_unchanged": {
+        "before": "h_pre",
+        "after": "h_post"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ],
+      "label": "restart accepts no change"
+    },
+    {
+      "outcome_in": {
+        "step": "after_restart",
+        "outcomes": [
+          "ACCEPTED"
+        ]
+      },
+      "requirements": [
+        "CORE-LINEAGE-001"
+      ],
+      "label": "pre-restart current token still accepted"
+    },
+    {
+      "history_equals": {
+        "step": "h",
+        "expected": [
+          {
+            "effect": "object_created"
+          },
+          {
+            "effect": "state_updated"
+          },
+          {
+            "effect": "relationship_added"
+          },
+          {
+            "effect": "lifecycle_transition"
+          }
+        ]
+      },
+      "requirements": [
+        "CORE-HIST-001",
+        "REL-REPLAY-001"
+      ]
+    },
+    {
+      "lineage": {
+        "object_id": "cs7-r",
+        "history": "h"
+      },
+      "requirements": [
+        "CORE-LINEAGE-001",
+        "CON-UNIQUE-001"
+      ]
+    }
+  ]
+}

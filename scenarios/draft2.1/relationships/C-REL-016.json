@@ -1,0 +1,164 @@
+{
+  "id": "C-REL-016",
+  "title": "Replay reconstructs relationship set after effective mutations and accepted no-ops",
+  "requirements": [
+    "REL-REPLAY-001",
+    "REL-NOOP-001",
+    "REL-DUP-001",
+    "REL-ABSENT-001",
+    "EVT-REPLAY-001"
+  ],
+  "spec_revision": "draft2.1",
+  "requires_capabilities": {
+    "relationship_add": true,
+    "relationship_remove": true,
+    "replay": true
+  },
+  "skip_if_missing": [
+    "relationship_add",
+    "relationship_remove",
+    "replay"
+  ],
+  "steps": [
+    {
+      "op": "create",
+      "as": "source_created",
+      "actor": "writer",
+      "object_id": "wi-rel-016",
+      "type": "conformance.work-item",
+      "initial_state": {
+        "title": "ReplaySet"
+      }
+    },
+    {
+      "op": "create",
+      "as": "target_created",
+      "actor": "writer",
+      "object_id": "party-rel-016",
+      "type": "conformance.party",
+      "initial_state": {
+        "name": "Target"
+      }
+    },
+    {
+      "op": "add_relationship",
+      "as": "first_add",
+      "actor": "writer",
+      "object_id": "wi-rel-016",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-016"
+      }
+    },
+    {
+      "op": "read",
+      "as": "after_first_add",
+      "actor": "writer",
+      "object_id": "wi-rel-016"
+    },
+    {
+      "op": "add_relationship",
+      "as": "duplicate_add",
+      "actor": "writer",
+      "object_id": "wi-rel-016",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-016"
+      },
+      "expected_version": "$after_first_add.semantic_view.object_version"
+    },
+    {
+      "op": "remove_relationship",
+      "as": "remove",
+      "actor": "writer",
+      "object_id": "wi-rel-016",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-016"
+      }
+    },
+    {
+      "op": "remove_relationship",
+      "as": "absent_remove",
+      "actor": "writer",
+      "object_id": "wi-rel-016",
+      "relationship": {
+        "type": "belongs_to",
+        "target": "party-rel-016"
+      }
+    },
+    {
+      "op": "semantic_view",
+      "as": "live",
+      "object_id": "wi-rel-016"
+    },
+    {
+      "op": "get_history",
+      "as": "history",
+      "object_id": "wi-rel-016"
+    },
+    {
+      "op": "replay",
+      "as": "replayed",
+      "object_id": "wi-rel-016"
+    }
+  ],
+  "assert": [
+    {
+      "step": "first_add",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "step": "duplicate_add",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "step": "remove",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "step": "absent_remove",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_set_empty": true,
+      "step": "live"
+    },
+    {
+      "relationship_collection_unique": true,
+      "step": "live"
+    },
+    {
+      "history_relationship_mutation_count": 2,
+      "step": "history"
+    },
+    {
+      "history_contains": {
+        "effect": "relationship_added",
+        "relationship_type": "belongs_to",
+        "relationship_target": "party-rel-016"
+      },
+      "step": "history"
+    },
+    {
+      "history_contains": {
+        "effect": "relationship_removed",
+        "relationship_type": "belongs_to",
+        "relationship_target": "party-rel-016"
+      },
+      "step": "history"
+    },
+    {
+      "step": "replayed",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "relationship_set_empty": true,
+      "step": "replayed"
+    },
+    {
+      "relationship_set_equals": "live",
+      "step": "replayed"
+    }
+  ]
+}

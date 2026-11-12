@@ -1,0 +1,193 @@
+{
+  "id": "D22-CS5-002",
+  "title": "Restored baseline relationships are preserved as baseline content or explicitly refused with no partial object",
+  "cs": [
+    "CS-5"
+  ],
+  "requirements": [
+    "EVT-BASELINE-001",
+    "REL-REPLAY-001",
+    "PORT-PRESERVE-001"
+  ],
+  "modality": "MUST",
+  "applicability": {
+    "trigger": "declared restoration capability (restoration: true, restorable_types contains conformance.record)",
+    "claims": [
+      {
+        "capability": "restoration"
+      },
+      {
+        "capability": "restorable_types",
+        "contains": "conformance.record"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "restore",
+      "as": "r",
+      "actor": "restorer",
+      "objects": [
+        {
+          "canonical_identity": "cs5r-a",
+          "type_identity": "conformance.record",
+          "type_version": "1",
+          "accepted_state": {
+            "title": "cs5r-a-secret-b",
+            "status": "active"
+          },
+          "relationships": [
+            {
+              "type": "depends_on",
+              "target": "p-baseline"
+            },
+            {
+              "type": "depends_on",
+              "target": "p-cs5r-a"
+            }
+          ],
+          "current_object_version": "7300444",
+          "history": [
+            {
+              "position": 1,
+              "effect": "create",
+              "resulting_object_version": "7300421",
+              "post_image": {
+                "title": "cs5r-a-secret-a",
+                "status": "draft"
+              },
+              "baseline_relationships": [
+                {
+                  "type": "depends_on",
+                  "target": "p-baseline"
+                }
+              ],
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-02T00:00:00Z"
+            },
+            {
+              "position": 2,
+              "effect": "state_change",
+              "resulting_object_version": "7300430",
+              "post_image": {
+                "title": "cs5r-a-secret-b",
+                "status": "draft"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 3,
+              "effect": "lifecycle_transition",
+              "resulting_object_version": "7300431",
+              "post_image": {
+                "title": "cs5r-a-secret-b",
+                "status": "active"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "position": 4,
+              "effect": "relationship_add",
+              "resulting_object_version": "7300444",
+              "relationship": {
+                "type": "depends_on",
+                "target": "p-cs5r-a"
+              },
+              "actor": "hist-actor",
+              "accepted_at": "2099-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "op": "get_history",
+      "as": "h",
+      "object_id": "cs5r-a"
+    }
+  ],
+  "assert": [
+    {
+      "one_of": {
+        "branches": [
+          {
+            "name": "accepted and preserved as baseline",
+            "assert": [
+              {
+                "outcome_in": {
+                  "step": "r",
+                  "outcomes": [
+                    "ACCEPTED"
+                  ]
+                }
+              },
+              {
+                "relationships_equal": {
+                  "step": "h",
+                  "expected": [
+                    {
+                      "type": "depends_on",
+                      "target": "p-baseline"
+                    },
+                    {
+                      "type": "depends_on",
+                      "target": "p-cs5r-a"
+                    }
+                  ]
+                }
+              },
+              {
+                "history_equals": {
+                  "step": "h",
+                  "keys": [
+                    "effect",
+                    "relationship_target"
+                  ],
+                  "expected": [
+                    {
+                      "effect": "object_created"
+                    },
+                    {
+                      "effect": "state_updated"
+                    },
+                    {
+                      "effect": "lifecycle_transition"
+                    },
+                    {
+                      "effect": "relationship_added",
+                      "relationship_target": "p-cs5r-a"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "explicitly refused, no partial object",
+            "assert": [
+              {
+                "outcome_in": {
+                  "step": "r",
+                  "outcomes": [
+                    "REFUSED"
+                  ]
+                }
+              },
+              {
+                "observer_absent": "h"
+              }
+            ]
+          }
+        ]
+      },
+      "requirements": [
+        "EVT-BASELINE-001",
+        "PORT-PRESERVE-001",
+        "REL-REPLAY-001"
+      ],
+      "label": "CS-5 branch"
+    }
+  ]
+}
